@@ -1,27 +1,20 @@
 # Introdução
 
-Texto descritivo com a visão geral do projeto abordado. Inclui o contexto, o problema, os objetivos, a justificativa e o público-alvo do projeto.
+No cenário atual, onde as tecnologias desempenham um papel cada vez mais central em nossas vidas, o controle financeiro pessoal se tornou um desafio significativo. Muitas pessoas enfrentam dificuldades em acompanhar suas despesas, receber renda de diferentes fontes e alcançar suas metas financeiras. O problema observado é a falta de uma solução eficaz e unificada para ajudar as pessoas a lidar com suas finanças de forma simples e organizada.
 
 ## Problema
-Nesse momento você deve apresentar o problema que a sua aplicação deve  resolver. No entanto, não é a hora de comentar sobre a aplicação.
 
-Descreva também o contexto em que essa aplicação será usada, se  houver: empresa, tecnologias, etc. Novamente, descreva apenas o que de  fato existir, pois ainda não é a hora de apresentar requisitos  detalhados ou projetos.
-
-Nesse momento, o grupo pode optar por fazer uso  de ferramentas como Design Thinking, que permite um olhar de ponta a ponta para o problema.
-
-> **Links Úteis**:
-> - [Objetivos, Problema de pesquisa e Justificativa](https://medium.com/@versioparole/objetivos-problema-de-pesquisa-e-justificativa-c98c8233b9c3)
-> - [Matriz Certezas, Suposições e Dúvidas](https://medium.com/educa%C3%A7%C3%A3o-fora-da-caixa/matriz-certezas-suposi%C3%A7%C3%B5es-e-d%C3%BAvidas-fa2263633655)
-> - [Brainstorming](https://www.euax.com.br/2018/09/brainstorming/)
+A falta de gerenciamento do dinheiro pode levar a uma série de problemas financeiros e pessoais, como dívidas crescentes e atrasos de pagamentos, consequentemente comprometendo metas financeiras. Quando as pessoas não possuem controle sobre seus gastos, ficam mais propensas a gastar mais do que recebem. Portanto, o gerenciamento do dinheiro é crucial para garantir estabilidade financeira e bem-estar geral.
 
 ## Objetivos
 
-Aqui você deve descrever os objetivos do trabalho indicando que o objetivo geral é desenvolver um software para solucionar o problema apresentado acima. 
+O objetivo geral deste projeto é desenvolver um software capaz de solucionar o problema apresentado pelo grupo, proporcionando assim aos usuários uma maneira eficaz de gerenciar suas finanças.
 
-Apresente também alguns (pelo menos 2) objetivos específicos dependendo de onde você vai querer concentrar a sua prática investigativa, ou como você vai aprofundar no seu trabalho.
- 
-> **Links Úteis**:
-> - [Objetivo geral e objetivo específico: como fazer e quais verbos utilizar](https://blog.mettzer.com/diferenca-entre-objetivo-geral-e-objetivo-especifico/)
+Alguns objetivos específicos estabelecido pelo grupo são:
+
+1- Facilitar o registro de despesas e metas pessoais: o grupo pretende desenvolver uma interface intuitiva que permita aos usuários registrarem suas transações e gastos de forma simples e rápida.
+
+2- Aprimorar a organização financeira: O software que será desenvolvido irá oferecer recursos que permitam aos usuários categorizar suas transações, tornando mais fácil o acompanhamento de seus gastos e ganhos.  
 
 ## Justificativa
 
