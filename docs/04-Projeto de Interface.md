@@ -1,18 +1,18 @@
 
 # Projeto de Interface
 
-Visão geral da interação do usuário pelas telas do sistema e protótipo interativo das telas com as funcionalidades que fazem parte do sistema (wireframes).
+Abaixo estão as interfaces desenvolvidas pelo grupo. É importante ressaltar que essas interfaces podem passar por modificações à medida que o projeto evolui, mas representam a ideia inicial da aplicação.
 
 ![Imagem](img/1.png)
 ![Imagem](img/2.png)
 ![Imagem](img/3.png)
 ![Imagem](img/4.png)
 
- Apresente as principais interfaces da plataforma. Discuta como ela foi elaborada de forma a atender os requisitos funcionais, não funcionais e histórias de usuário abordados nas <a href="2-Especificação do Projeto.md"> Documentação de Especificação</a>.
+O grupo pensou em desenvolver uma aplicação que fosse facilmente acessível a todos os usuários, com interfaces simples, porém eficazes.
 
 ## Diagrama de Fluxo
 
-O fluxograma apresentado demonstra uma representação simplificada do processo a ser seguido no projeto em desenvolvimento.
+O fluxograma apresentado demonstra uma representação simplificada do processo a ser seguido refrente ao projeto em desenvolvimento.
 
 ![Fluxograma](img/Fluxograma.png)
 
