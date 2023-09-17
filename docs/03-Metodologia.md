@@ -31,7 +31,7 @@ etiquetas:
 - `enhancement`: uma funcionalidade precisa ser melhorada
 - `feature`: uma nova funcionalidade precisa ser introduzida
 
-Discuta como a configuração do projeto foi feita na ferramenta de versionamento escolhida. Exponha como a gerência de tags, merges, commits e branchs é realizada. Discuta como a gerência de issues foi realizada.
+Durante o desenvolvimento do código, cada participante fara os próprios testes após o desenvolvimento em uma branch,durante o desenvolvimento, será discutido nas sprints sobre a branch e eventuais melhorias ou mudanças que podem ser feitas. Após o termino do desenvolvimento e dos testes realizado pelo autor, será passado para outra pessoa da equipe, responsável pelo teste geral, com a finalidade de forçar o acontecimento de bugs e erros a fim de saber se a branch está ou não segura para ser subida para a master. Após a subir a branch para a master, será discutido nas sprints a implementação da mesma.
 
 > **Links Úteis**:
 > - [Microfundamento: Gerência de Configuração](https://pucminas.instructure.com/courses/87878/)
@@ -48,10 +48,12 @@ Discuta como a configuração do projeto foi feita na ferramenta de versionament
 Apresente a divisão de papéis entre os membros do grupo.
 
 Exemplificação: A equipe utiliza metodologias ágeis, tendo escolhido o Scrum como base para definição do processo de desenvolvimento. A equipe está organizada da seguinte maneira:
-- Scrum Master: Felipe Domingos;
-- Product Owner: Rommel Carneiro;
-- Equipe de Desenvolvimento: Pedro Penna, Pedro Ivo, Rodrigo Richard;
-- Equipe de Design: Simone Nogueira.
+- Scrum Master: Júlia Miranda;
+- Tester: Júlia Miranda;
+- Product Owner: Leonardo Vilela Cardoso;
+- Equipe de Desenvolvimento: Pedro Henrique Almeida, Ana Luiza, Breno Henrique, Francisco Henrique;
+- Equipe de Banco de Dados: Pedro Henrique Almeida, Brenho Henrique;
+- Equipe de Design: Júlia Miranda.
 
 > **Links Úteis**:
 > - [11 Passos Essenciais para Implantar Scrum no seu Projeto](https://mindmaster.com.br/scrum-11-passos/)
@@ -60,7 +62,7 @@ Exemplificação: A equipe utiliza metodologias ágeis, tendo escolhido o Scrum 
 
 ### Processo
 
-Coloque  informações sobre detalhes da implementação do Scrum seguido pelo grupo. O grupo deverá fazer uso do recurso de gerenciamento de projeto oferecido pelo GitHub, que permite acompanhar o andamento do projeto, a execução das tarefas e o status de desenvolvimento da solução.
+As reuniões serão feitas todos os dias às terças das 20:50 às 22:30. Durante as reuniões serão comentadas as branchs ativas e o andamento delas, bem como o espaço para opniões dos outros membros da equipe e soluções para problemas encontrados. Os desenvolvedores tambem terão espaço para pedir auxilio e explicar o andamento da branch ativa para o product owner e para o scrum master.
  
 > **Links Úteis**:
 > - [Planejamento e Gestáo Ágil de Projetos](https://pucminas.instructure.com/courses/87878/pages/unidade-2-tema-2-utilizacao-de-ferramentas-para-controle-de-versoes-de-software)
@@ -74,11 +76,12 @@ Coloque  informações sobre detalhes da implementação do Scrum seguido pelo g
 
 As ferramentas empregadas no projeto são:
 
-- Editor de código.
-- Ferramentas de comunicação
-- Ferramentas de desenho de tela (_wireframing_)
+- Editor de código: Visual Studio Code / Visual Studio Community / ExpoDev
+- Ferramentas de comunicação: Microssoft Teams / WhatsApp / Canvas
+- Banco de Dados: FireBase
+- Ferramentas de desenho de tela
 
-O editor de código foi escolhido porque ele possui uma integração com o sistema de versão. As ferramentas de comunicação utilizadas possuem integração semelhante e por isso foram selecionadas. Por fim, para criar diagramas utilizamos essa ferramenta por melhor captar as necessidades da nossa solução.
+O editor de código foi escolhido porque ele possui uma integração com o sistema de versão. As ferramentas de comunicação utilizadas possuem integração semelhante e por isso foram selecionadas. Por fim, para criar diagramas utilizamos essa ferramenta por melhor captar as necessidades da nossa solução. O Banco de Dados escolhido tambem reflete na facilidade da gravação de dados que serão utilizados e manipulados pelo aplicativo, possuindo tambem, uma otima conversa com o aplicativo de codificação e com o sistema de versão.
 
 Liste quais ferramentas foram empregadas no desenvolvimento do projeto, justificando a escolha delas, sempre que possível.
  
