@@ -1,9 +1,11 @@
 
 # Metodologia
 
-<span style="color:red">Pré-requisitos: <a href="2-Especificação do Projeto.md"> Documentação de Especificação</a></span>
+<span style="color:red">Pré-requisitos: <a href="2-Especificação do Projeto.md"> Documentação de Escopo e Objetivos: Uma vez que o problema está definido em construir uma aplicação que oriente pessoas a gerenciar suas economias . A equipe determinou o escopo do projeto e estabeleceu objetivos específicos e mensuráveis a serem alcançados dentro da construção do aplicativo 
 
-Descreva aqui a metodologia de trabalho do grupo para atacar o problema. Definições sobre os ambiente de trabalho utilizados pela  equipe para desenvolver o projeto. Abrange a relação de ambientes utilizados, a estrutura para gestão do código fonte, além da definição do processo e ferramenta através dos quais a equipe se organiza (Gestão de Times).
+Ambientes de Trabalho:
+
+Desenvolvimento: A equipe utiliza ambientes de desenvolvimento apropriados para a linguagem : IDEs (Ambientes Integrados de Desenvolvimento) Visual Studio Code.
 
 ## Relação de Ambientes de Trabalho
 
