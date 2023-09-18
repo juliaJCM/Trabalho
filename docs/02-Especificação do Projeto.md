@@ -103,7 +103,7 @@ Enumere as restrições à sua solução. Lembre-se de que as restrições geral
 
 ## Diagrama de Casos de Uso
 
-![Casos de uso](img/02-matriz-rastreabilidade.png)
+![Casos de uso](img/casosUso.png)
 
 
 # Matriz de Rastreabilidade
