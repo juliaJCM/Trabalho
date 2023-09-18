@@ -38,23 +38,17 @@ Descrição: Isabel é uma advogada experiente com múltiplas responsabilidades 
 
 ## Histórias de Usuários
 
-Com base na análise das personas forma identificadas as seguintes histórias de usuários:
-
-|EU COMO... `PERSONA`| QUERO/PRECISO ... `FUNCIONALIDADE` |PARA ... `MOTIVO/VALOR`                 |
-|--------------------|------------------------------------|----------------------------------------|
-|Usuário do sistema  | Registrar minhas tarefas           | Não esquecer de fazê-las               |
-|Administrador       | Alterar permissões                 | Permitir que possam administrar contas |
-
-Apresente aqui as histórias de usuário que são relevantes para o projeto de sua solução. As Histórias de Usuário consistem em uma ferramenta poderosa para a compreensão e elicitação dos requisitos funcionais e não funcionais da sua aplicação. Se possível, agrupe as histórias de usuário por contexto, para facilitar consultas recorrentes à essa parte do documento.
-
-> **Links Úteis**:
-> - [Histórias de usuários com exemplos e template](https://www.atlassian.com/br/agile/project-management/user-stories)
-> - [Como escrever boas histórias de usuário (User Stories)](https://medium.com/vertice/como-escrever-boas-users-stories-hist%C3%B3rias-de-usu%C3%A1rios-b29c75043fac)
-> - [User Stories: requisitos que humanos entendem](https://www.luiztools.com.br/post/user-stories-descricao-de-requisitos-que-humanos-entendem/)
-> - [Histórias de Usuários: mais exemplos](https://www.reqview.com/doc/user-stories-example.html)
-> - [9 Common User Story Mistakes](https://airfocus.com/blog/user-story-mistakes/)
-
-
+| EU COMO...              | QUERO/PRECISO...                                      | PARA...                                   | MOTIVO/VALOR                               |
+|-------------------------|-------------------------------------------------------|-------------------------------------------|--------------------------------------------|
+| Gabriel Barbosa         | Registrar despesas de forma simples e rápida, categorizando-as | Acompanhar o orçamento e economizar para estudos e viagens | Evitar gastos excessivos e atingir metas financeiras. |
+|                       | Definir metas de economia mensais para objetivos de estudos e viagens | Atingir metas financeiras de longo prazo  | Planejar financeiramente para objetivos pessoais. |
+|                       | Receber notificações ou lembretes sobre datas de vencimento de despesas/metas | Evitar esquecimentos e manter prazos importantes | Gerenciar com eficácia os pagamentos e metas financeiras. |
+| Ana Clara               | Configurar planejamento financeiro para comprar casa e planejar educação dos filhos | Alcançar metas de longo prazo          | Garantir estabilidade financeira para a família. |
+|                       | Visualizar relatórios e gráficos do patrimônio líquido | Tomar decisões financeiras informadas    | Monitorar o progresso financeiro e tomar decisões embasadas. |
+| Soares dos Santos       | Gerenciar gastos relacionados à educação, incluindo mensalidades e materiais | Manter finanças sob controle             | Evitar gastos desnecessários e focar nos estudos. |
+|                       | Automatizar a categorização de despesas relacionadas à educação | Facilitar o acompanhamento financeiro     | Economizar tempo e esforço no gerenciamento financeiro. |
+| Isabel                | Importar dados de investimentos para acompanhar o portfólio financeiro | Consolidar informações financeiras      | Manter um registro completo de investimentos. |
+|                       | Definir orçamentos para despesas dos filhos e receber alertas | Controlar e planejar despesas familiares | Garantir uma gestão financeira eficaz da família. |
 
 ## Requisitos
 
