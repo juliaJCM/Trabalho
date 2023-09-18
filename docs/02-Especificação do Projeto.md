@@ -8,32 +8,32 @@ Apresente uma visão geral do que será abordado nesta parte do documento, enume
 
 ## Personas
 
-Gabriel Barbosa
-Idade: 26 anos
-Profissão: Arquiteto autônomo
-Estado Civil: Solteiro
-Metas Financeiras: Realizar um mestrado no exterior, fazer intercâmbio e viajar pelo mundo.
+Gabriel Barbosa <br>
+Idade: 26 anos <br>
+Profissão: Arquiteto autônomo <br>
+Estado Civil: Solteiro <br>
+Metas Financeiras: Realizar um mestrado no exterior, fazer intercâmbio e viajar pelo mundo. <br>
 Descrição: Gabriel é um jovem arquiteto autônomo com ambições acadêmicas e pessoais. Ele está determinado a realizar um mestrado no exterior e explorar o mundo através de viagens. Para alcançar essas metas financeiras, ele precisa de uma ferramenta que o ajude a economizar, controlar gastos e planejar financeiramente.
 
-Ana Clara
-Idade: 30 anos
-Profissão: Gerente de marketing
-Estado Civil: Casada
-Metas Financeiras: Economizar para comprar uma casa e planejar a educação dos filhos.
+Ana Clara <br>
+Idade: 30 anos <br>
+Profissão: Gerente de marketing <br>
+Estado Civil: Casada <br>
+Metas Financeiras: Economizar para comprar uma casa e planejar a educação dos filhos. <br>
 Descrição: Ana Clara é uma profissional experiente que prioriza a estabilidade financeira para criar um lar confortável para sua família. Suas metas incluem a compra de uma casa e o planejamento da educação de seus filhos. Ela busca uma solução que a ajude a controlar despesas, economizar e investir para o futuro.
 
-Soares dos Santos
-Idade: 20 anos
-Profissão: Estudante universitário em meio período
-Estado Civil: Solteiro
-Metas Financeiras: Gerenciar seu orçamento estudantil e economizar para futuros estudos.
+Soares dos Santos <br>
+Idade: 20 anos <br>
+Profissão: Estudante universitário em meio período <br>
+Estado Civil: Solteiro <br>
+Metas Financeiras: Gerenciar seu orçamento estudantil e economizar para futuros estudos. <br>
 Descrição: Soares dos Santos é um estudante universitário que precisa equilibrar suas finanças enquanto se concentra nos estudos. Ele deseja economizar para futuros estudos e precisa de uma solução simples e acessível para controlar suas finanças enquanto administra seu orçamento de estudante.
 
-Isabel
-Idade: 45 anos
-Profissão: Advogada
-Estado Civil: Casada
-Metas Financeiras: Planejar a aposentadoria, investir em imóveis e pagar a faculdade dos filhos.
+Isabel <br>
+Idade: 45 anos <br>
+Profissão: Advogada <br>
+Estado Civil: Casada <br>
+Metas Financeiras: Planejar a aposentadoria, investir em imóveis e pagar a faculdade dos filhos. <br>
 Descrição: Isabel é uma advogada experiente com múltiplas responsabilidades financeiras, desde o planejamento de sua aposentadoria até o apoio à educação de seus filhos. Ela busca uma solução completa e eficiente que a ajude a gerenciar suas finanças, investimentos e metas financeiras de longo prazo.
 
 ## Histórias de Usuários
@@ -52,14 +52,17 @@ Descrição: Isabel é uma advogada experiente com múltiplas responsabilidades 
 
 ## Requisitos
 
-As tabelas que se seguem apresentam os requisitos funcionais e não funcionais que detalham o escopo do projeto. Para determinar a prioridade de requisitos, aplicar uma técnica de priorização de requisitos e detalhar como a técnica foi aplicada.
-
-### Requisitos Funcionais
-
-|ID    | Descrição do Requisito  | Prioridade |
-|------|-----------------------------------------|----|
-|RF-001| Permitir que o usuário cadastre tarefas | ALTA | 
-|RF-002| Emitir um relatório de tarefas no mês   | MÉDIA |
+| ID     | Descrição do Requisito                                    | Prioridade |
+|--------|---------------------------------------------------------|------------|
+| RF-001 | Permitir que o usuário cadastre despesas e metas pessoais | ALTA       |
+| RF_002 | Facilitar o registro de despesas de forma simples e rápida, permitindo categorização | MÉDIA      |
+| RF-003 | Possibilitar que o usuário defina metas de economia mensais para seus objetivos financeiros | ALTA       |
+| RF-004 | Permitir que o usuário receba notificações ou lembretes sobre datas de vencimento de despesas ou metas financeiras | BAIXA       |
+| RF-005 | Oferecer uma função de planejamento financeiro de longo prazo para objetivos como comprar uma casa ou planejar qualquer demanda| ALTA       |
+| RF-006 | Disponibilizar relatórios e gráficos que mostrem a evolução do patrimônio líquido do usuário | MÉDIA      |
+| RF-007 | Possibilitar o gerenciamento de gastos, incluindo mensalidades | ALTA       |
+| RF-008 | Implementar um recurso de categorização automática de despesas | MÉDIA      |
+| RF-009 | Permitir que o usuário defina orçamentos para despesas e receba alertas quando esses orçamentos estiverem prestes a serem atingidos | BAIXA      |
 
 ### Requisitos não Funcionais
 
