@@ -8,19 +8,33 @@ Apresente uma visão geral do que será abordado nesta parte do documento, enume
 
 ## Personas
 
-Pedro Paulo tem 26 anos, é arquiteto recém-formado e autônomo. Pensa em se desenvolver profissionalmente através de um mestrado fora do país, pois adora viajar, é solteiro e sempre quis fazer um intercâmbio. Está buscando uma agência que o ajude a encontrar universidades na Europa que aceitem alunos estrangeiros.
+Gabriel Barbosa
+Idade: 26 anos
+Profissão: Arquiteto autônomo
+Estado Civil: Solteiro
+Metas Financeiras: Realizar um mestrado no exterior, fazer intercâmbio e viajar pelo mundo.
+Descrição: Gabriel é um jovem arquiteto autônomo com ambições acadêmicas e pessoais. Ele está determinado a realizar um mestrado no exterior e explorar o mundo através de viagens. Para alcançar essas metas financeiras, ele precisa de uma ferramenta que o ajude a economizar, controlar gastos e planejar financeiramente.
 
-Enumere e detalhe as personas da sua solução. Para tanto, baseie-se tanto nos documentos disponibilizados na disciplina e/ou nos seguintes links:
+Ana Clara
+Idade: 30 anos
+Profissão: Gerente de marketing
+Estado Civil: Casada
+Metas Financeiras: Economizar para comprar uma casa e planejar a educação dos filhos.
+Descrição: Ana Clara é uma profissional experiente que prioriza a estabilidade financeira para criar um lar confortável para sua família. Suas metas incluem a compra de uma casa e o planejamento da educação de seus filhos. Ela busca uma solução que a ajude a controlar despesas, economizar e investir para o futuro.
 
-> **Links Úteis**:
-> - [Rock Content](https://rockcontent.com/blog/personas/)
-> - [Hotmart](https://blog.hotmart.com/pt-br/como-criar-persona-negocio/)
-> - [O que é persona?](https://resultadosdigitais.com.br/blog/persona-o-que-e/)
-> - [Persona x Público-alvo](https://flammo.com.br/blog/persona-e-publico-alvo-qual-a-diferenca/)
-> - [Mapa de Empatia](https://resultadosdigitais.com.br/blog/mapa-da-empatia/)
-> - [Mapa de Stalkeholders](https://www.racecomunicacao.com.br/blog/como-fazer-o-mapeamento-de-stakeholders/)
->
-Lembre-se que você deve ser enumerar e descrever precisamente e personalizada todos os clientes ideais que sua solução almeja.
+Soares dos Santos
+Idade: 20 anos
+Profissão: Estudante universitário em meio período
+Estado Civil: Solteiro
+Metas Financeiras: Gerenciar seu orçamento estudantil e economizar para futuros estudos.
+Descrição: Soares dos Santos é um estudante universitário que precisa equilibrar suas finanças enquanto se concentra nos estudos. Ele deseja economizar para futuros estudos e precisa de uma solução simples e acessível para controlar suas finanças enquanto administra seu orçamento de estudante.
+
+Isabel
+Idade: 45 anos
+Profissão: Advogada
+Estado Civil: Casada
+Metas Financeiras: Planejar a aposentadoria, investir em imóveis e pagar a faculdade dos filhos.
+Descrição: Isabel é uma advogada experiente com múltiplas responsabilidades financeiras, desde o planejamento de sua aposentadoria até o apoio à educação de seus filhos. Ela busca uma solução completa e eficiente que a ajude a gerenciar suas finanças, investimentos e metas financeiras de longo prazo.
 
 ## Histórias de Usuários
 
