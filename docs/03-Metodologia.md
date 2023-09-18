@@ -6,7 +6,7 @@
 Ambientes de Trabalho:
 
 Desenvolvimento: A equipe utiliza ambientes de desenvolvimento apropriados para a linguagem : IDEs (Ambientes Integrados de Desenvolvimento) Visual Studio Code.
-
+o vscode  : "É uma ferramenta para codificação, estamos utilizando-a pois seu uso é eficiente para o desenvolvimento do app mobile e que conta com uma vasta biblioteca para auxiliar e linkar o repositorio e o banco de dados ao código"
 ## Relação de Ambientes de Trabalho
 
 Os artefatos do projeto são desenvolvidos a partir de diversas plataformas e a relação dos ambientes com seu respectivo propósito deverá ser apresentada em uma tabela que especifica que detalha Ambiente, Plataforma e Link de Acesso. 
