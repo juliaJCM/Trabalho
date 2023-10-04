@@ -1,4 +1,4 @@
-# TÍTULO DO PROJETO
+# ![Gráfico de Gantt](src/assets/logo.png)
 
 `ANÁLISE E DESENVOLVIMENTO DE SISTEMAS`
 
