@@ -12,7 +12,7 @@ O grupo pensou em desenvolver uma aplicação que fosse facilmente acessível a 
 
 O fluxograma apresentado demonstra uma representação simplificada do processo a ser seguido refrente ao projeto em desenvolvimento.
 
-![Fluxograma](img/Fluxograma.png)
+![Fluxograma](img/fluograma.jpg)
 
 
 
