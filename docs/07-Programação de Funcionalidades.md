@@ -2,7 +2,7 @@
 
 ## Implementação de Layouts
 
-[UserFlow](img/userFlow.png)
+![UserFlow](img/userFlow.png)
 
 
 Para cada requisito funcional, pode ser entregue um artefato desse tipo
