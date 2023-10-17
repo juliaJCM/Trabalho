@@ -21,7 +21,7 @@ As referências abaixo irão auxiliá-lo na geração do artefato “Diagrama de
 
 ## Esquema Relacional
 
-
+![Diagrama sem nome drawio](https://github.com/juliaJCM/Trabalho/assets/101288724/632a11d7-aa43-4eae-8f02-df33f84b75d0)
 
 ## Modelo Físico
 
