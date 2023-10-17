@@ -14,5 +14,12 @@ O fluxograma apresentado demonstra uma representação simplificada do processo 
 
 ![Fluxograma](img/fluograma.jpg)
 
+##Wireframes
+
+Abaixo estão os primeiros wireframes a serem criados pelo grupo.
+
+![Wireframe](img/Conta.png)
+![Wireframe](img/Principal.png)
+
 
 
