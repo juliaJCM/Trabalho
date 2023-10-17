@@ -1,0 +1,24 @@
+CREATE TABLE Cliente (
+Usuario VARCHAR(255) PRIMARY KEY,
+Senha VARCHAR(255),
+Email VARCHAR(255),
+Nome VARCHAR(255)
+)
+
+CREATE TABLE Gastos (
+ ID INT PRIMARY KEY,
+ Usuario VARCHAR(255),
+ FOREIGN KEY (Usuario) REFERENCES Cliente(Usuario),
+ Valor DECIMAL (10,2),
+ Data VARCHAR(255),
+ Nome VARCHAR(255)
+)
+
+CREATE TABLE Renda (
+ ID INT PRIMARY KEY,
+ Usuario VARCHAR(255),
+ FOREIGN KEY (Usuario) REFERENCES Cliente(Usuario),
+ Valor DECIMAL (10,2),
+ Data VARCHAR(255),
+ Nome VARCHAR(255)
+)
