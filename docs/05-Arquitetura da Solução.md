@@ -4,20 +4,15 @@
 
 Definição de como o software é estruturado em termos dos componentes que fazem parte da solução e do ambiente de hospedagem da aplicação.
 
-![image](https://github.com/juliaJCM/Trabalho/assets/84110946/bcc1094e-bff8-409d-a7d8-9e823d607641)
+
 
 ## Diagrama de Classes
 
-O diagrama de classes ilustra graficamente como será a estrutura do software, e como cada uma das classes da sua estrutura estarão interligadas. Essas classes servem de modelo para materializar os objetos que executarão na memória.
-
-As referências abaixo irão auxiliá-lo na geração do artefato “Diagrama de Classes”.
-
-> - [Diagramas de Classes - Documentação da IBM](https://www.ibm.com/docs/pt-br/rational-soft-arch/9.6.1?topic=diagrams-class)
-> - [O que é um diagrama de classe UML? | Lucidchart](https://www.lucidchart.com/pages/pt/o-que-e-diagrama-de-classe-uml)
+![image](https://github.com/juliaJCM/Trabalho/assets/84110946/bcc1094e-bff8-409d-a7d8-9e823d607641)
 
 ## Modelo ER
 
-![Entity Relationship Diagram](https://github.com/juliaJCM/Trabalho/assets/101288724/e3d3394e-cde2-4645-90c1-c126a32d635a)
+![Entity Relationship Diagram](https://github.com/juliaJCM/Trabalho/assets/101288724/2f62d4bb-4fae-482c-a384-8bfdda24ceb2)
 
 ## Esquema Relacional
 
