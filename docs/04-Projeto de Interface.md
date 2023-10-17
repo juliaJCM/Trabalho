@@ -3,7 +3,7 @@
 
 Abaixo estão as interfaces desenvolvidas pelo grupo. É importante ressaltar que essas interfaces podem passar por modificações à medida que o projeto evolui, mas representam a ideia inicial da aplicação.
 
-![Imagem](img/Interfaces.png)
+![Imagem](img/)
 
 
 O grupo pensou em desenvolver uma aplicação que fosse facilmente acessível a todos os usuários, com interfaces simples, porém eficazes.
