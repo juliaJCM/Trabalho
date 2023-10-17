@@ -4,8 +4,8 @@
 
 ![UserFlow](img/userFlow.png)
 
+## Gestão de Trabalho
 
-Para cada requisito funcional, pode ser entregue um artefato desse tipo
 
 > **Links Úteis**:
 >
