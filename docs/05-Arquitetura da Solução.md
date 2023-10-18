@@ -28,6 +28,7 @@ Entregar um arquivo banco.sql contendo os scripts de criação das tabelas do ba
 > - FireBase e ferramentas;
 > - Miro para a criação do Modelo ER;
 > - DrawIo para a criação de Diagrama de Classes e Esquema Relacional;
+> - Linguagens utilizadas: JavaScript e React Native;
 
 ## Hospedagem
 
