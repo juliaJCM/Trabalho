@@ -24,10 +24,10 @@ Entregar um arquivo banco.sql contendo os scripts de criação das tabelas do ba
 
 ## Tecnologias Utilizadas
 
-Microsoft SQL (Engloba todas as ferramentas relacionadas ao sql);
-FireBase e ferramentas;
-Miro para a criação do Modelo ER;
-DrawIo para a criação de Diagrama de Classes e Esquema Relacional;
+> - Microsoft SQL (Engloba todas as ferramentas relacionadas ao sql);
+> - FireBase e ferramentas;
+> - Miro para a criação do Modelo ER;
+> - DrawIo para a criação de Diagrama de Classes e Esquema Relacional;
 
 ## Hospedagem
 
