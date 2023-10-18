@@ -4,7 +4,7 @@
 
 Abaixo encontram-se os testes relativos ao login e à inserção de valores no sistema, cujos resultados indicam tanto o sucesso quanto o fracasso em relação a cada ação.
 
-![Testes](img/Testes_1_e_2.png)
+![Testes](img/Testes.png)
 
 ## Ferramentas de Testes (Opcional)
 
