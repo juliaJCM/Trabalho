@@ -1,36 +1,66 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, Button, FlatList, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, TextInput, Button, FlatList, StyleSheet, Keyboard } from 'react-native';
 import Logo from '../Logo/Logo';
 import moment from 'moment';
 import 'moment/locale/pt-br';
 import Despesa from '../Despesa/Despesa';
+import { firebase } from '../../firebase/config';
 
-export default function AdicionaDespesa() {
+const todoRef = firebase.firestore().collection('todos');
+
+//exlcuir despesa do banco de dados
+export const deleteTodo = (todos) => {
+    todoRef.doc(todos.id).delete()
+  }
+
+export default function GerenciarDespesas() {
   moment.locale('pt-br');
+  const [todos, setTodos] = useState([]);
   const [valor, setValor] = useState('');
   const [descricao, setDescricao] = useState('');
   const [expensesByMonth, setExpensesByMonth] = useState({});
 
-  const handleAddValor = () => {
-    if (valor.trim() !== '' && descricao.trim() !== '') {
-      const newExpense = {
+  //buscar ou ler os dados do banco
+  useEffect(() => {
+  todoRef.orderBy('createdAt', 'desc').onSnapshot((querySnapshot) => {
+    const todos = [];
+    querySnapshot.forEach((doc) => {
+      const { heading, valor, createdAt } = doc.data(); // Correção aqui
+      todos.push({
+        id: doc.id,
+        heading,
         valor,
-        descricao,
-        data: moment().format('DD/MM/YYYY'),
+        createdAt,
+      });
+    });
+    setTodos(todos);
+  });
+}, []);
+
+  //adicionar despesa ao banco de dados
+  const handleAddValor = () => {
+    //verifica se há texto escrito
+    if (valor.trim() !== '' && descricao.trim() !== '') {
+      //obtem uma timestamp
+      const timestamp = firebase.firestore.FieldValue.serverTimestamp();
+
+      const newExpense = {
+        heading: descricao,
+        valor: valor,
+        createdAt: timestamp,
       };
-
-      const monthKey = moment().format('MMMM YYYY');
-      const updatedExpensesByMonth = { ...expensesByMonth };
-
-      if (!updatedExpensesByMonth[monthKey]) {
-        updatedExpensesByMonth[monthKey] = [];
-      }
-
-      updatedExpensesByMonth[monthKey].push(newExpense);
-
-      setExpensesByMonth(updatedExpensesByMonth);
-      setValor('');
-      setDescricao('');
+      todoRef
+          .add(newExpense)
+          .then(() => {
+            //resetar as variaveis
+            setDescricao('');
+            setValor('');
+            Keyboard.dismiss();
+          })
+           .catch((error) => {
+          // mostra uma mensagem de alerta caso ocorra algum erro
+          alert(error);
+        });
     }
   };
 
@@ -58,18 +88,14 @@ export default function AdicionaDespesa() {
         style={styles.button}
       />
 
-      {Object.keys(expensesByMonth).map((month) => (
-        <View key={month}>
-          <Text style={styles.monthTitle}>{month}</Text>
-          <FlatList
-            data={expensesByMonth[month]}
-            renderItem={({ item }) => (
-              <Despesa expense={item} />
-            )}
-            keyExtractor={(item, index) => index.toString()}
-          />
-        </View>
-      ))}
+      <FlatList
+        style={{}}
+        data={todos}
+        numColumns={1}
+        renderItem={({ item }) => (
+          <Despesa item={item}/>
+        )}
+      />
     </View>
   );
 }
