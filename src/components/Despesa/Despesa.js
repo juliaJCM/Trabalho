@@ -1,12 +1,18 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Button } from 'react-native';
+import { deleteTodo } from '../AdicionaDespesa/AdicionaDespesa';
+import moment from 'moment';
 
-export default function Despesa({ expense }) {
+export default function Despesa({ item }) {
+
+  const formattedDate = item && item.createdAt ? moment(item.createdAt.toDate()).format('DD/MM/YYYY') : '';
+
   return (
     <View style={[styles.card, styles.cardWide]}> 
-      <Text style={styles.cardText}>Data: {expense.data} </Text>
-      <Text style={styles.cardText}>Valor: R$ {expense.valor} </Text>
-      <Text style={styles.cardText}>Descrição: {expense.descricao}</Text>
+      <Text style={styles.cardText}>Data: {formattedDate}</Text>
+      <Text style={styles.cardText}>Descrição: {item && item.heading} </Text>
+      <Text style={styles.cardText}>Valor: R${item && item.valor}  </Text>
+      <Button title="Excluir" onPress={() => deleteTodo(item)} color="red" />
     </View>
   );
 }
