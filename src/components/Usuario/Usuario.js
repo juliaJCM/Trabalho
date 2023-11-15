@@ -5,7 +5,7 @@ export default function Usuario() {
   return (
     <View style={styles.container}>
       <Image
-        source={require('assets/usuario.png')}
+        source={require('../../assets/usuario.png')}
         style={{ width: 50, height: 50 }}
       />
       <Text>Conta do usuário!</Text>
@@ -17,6 +17,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#FFD700',
+    backgroundColor: '#EBC725',
   },
 });

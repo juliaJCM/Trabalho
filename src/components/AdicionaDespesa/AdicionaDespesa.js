@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#FFD700',
+    backgroundColor: '#EBC725',
   },
   title: {
     fontSize: 20,
@@ -120,31 +120,9 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     padding: 5,
   },
-  monthTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginTop: 20,
-  },
+ 
   button: {
     borderRadius: 10,
   },
-  card: {
-    backgroundColor: 'white',
-    padding: 10,
-    borderRadius: 5,
-    marginBottom: 10,
-    shadowColor: 'black',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
-    elevation: 3,
-    marginTop: 20,
-  },
-  cardWide: {
-    width: 300,
-  },
-  cardText: {
-    fontSize: 16,
-    marginBottom: 5,
-  },
+
 });

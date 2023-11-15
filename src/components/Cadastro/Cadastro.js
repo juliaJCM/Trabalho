@@ -3,38 +3,49 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-nativ
 import Logo from '../Logo/Logo';
 import { firebase } from '../../firebase/config';
 
-export default function Inicio({ navigation }) {
+export default function Cadastro({ navigation }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
 
-  const handleLogin = async () => {
+  const handleCadastro = async () => {
     try {
-      if (username && password) {
+      if (username && password && email) {
        
-        await firebase.auth().signInWithEmailAndPassword(username, password);
-        navigation.navigate('Tabs');
+        await firebase.auth().createUserWithEmailAndPassword(email, password);
+
+      
+        const user = firebase.auth().currentUser;
+        await user.updateProfile({
+          displayName: username,
+        });
+
+        alert('Cadastro realizado com sucesso!');
+        navigation.navigate('Inicio');
       } else {
-        alert('Por favor, preencha o nome de usuário e senha.');
+        alert('Por favor, preencha o email, nome de usuário e senha.');
       }
     } catch (error) {
-      alert('Erro ao fazer login: ' + error.message);
+      alert('Erro ao cadastrar usuário: ' + error.message);
     }
-  };
-
-  const handleCadastro = () => {
-    navigation.navigate('Cadastro');
   };
 
   return (
     <View style={styles.container}>
       <Logo />
-      <Text>Seja Bem-Vindo</Text>
+      <Text>Cadastre-se</Text>
 
       <TextInput
         style={styles.input}
-        placeholder="Nome de Usuário ou Email"
+        placeholder="Nome de Usuário"
         value={username}
         onChangeText={(text) => setUsername(text)}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        value={email}
+        onChangeText={(text) => setEmail(text)}
       />
       <TextInput
         style={styles.input}
@@ -44,14 +55,6 @@ export default function Inicio({ navigation }) {
         onChangeText={(text) => setPassword(text)}
       />
 
-      <TouchableOpacity
-        style={[styles.button, { backgroundColor: 'black' }]}
-        onPress={handleLogin}
-      >
-        <Text style={styles.buttonText}>Login</Text>
-      </TouchableOpacity>
-
-      <Text  style={styles.text}>Não tem uma conta?</Text>
       <TouchableOpacity
         style={[styles.button, { backgroundColor: 'black' }]}
         onPress={handleCadastro}
@@ -81,7 +84,7 @@ const styles = StyleSheet.create({
   button: {
     borderRadius: 10,
     paddingVertical: 10,
-    paddingHorizontal: 50,
+    paddingHorizontal: 20,
     marginVertical: 10,
   },
   buttonText: {
@@ -89,7 +92,4 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 18,
   },
-  text:{
-    marginTop: 100,
-  }
 });

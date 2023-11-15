@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import MyTabs from './components/MyTabs';
 import Inicio from './components/Inicio/Inicio';
+import Cadastro from './components/Cadastro/Cadastro'; // Importe o componente Cadastro
 
 const Stack = createStackNavigator();
 
@@ -23,6 +24,13 @@ export default function App() {
           component={MyTabs}
           options={{
             headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="Cadastro"
+          component={Cadastro}
+          options={{
+            headerShown: true,
           }}
         />
       </Stack.Navigator>
