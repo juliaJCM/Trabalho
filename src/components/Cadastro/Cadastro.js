@@ -1,65 +1,58 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-import Logo from '../Logo/Logo';
-import { firebase } from '../../firebase/config';
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Keyboard,
+} from "react-native";
+import { cadastrarUsuario } from "../../controllers/FirebaseController";
 
-export default function Cadastro({ navigation }) {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [email, setEmail] = useState('');
+export default function Cadastro() {
+  const [nome, setNome] = useState("");
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
 
-  const handleCadastro = async () => {
-    try {
-      if (username && password && email) {
-       
-        await firebase.auth().createUserWithEmailAndPassword(email, password);
-
-      
-        const user = firebase.auth().currentUser;
-        await user.updateProfile({
-          displayName: username,
-        });
-
-        alert('Cadastro realizado com sucesso!');
-        navigation.navigate('Inicio');
-      } else {
-        alert('Por favor, preencha o email, nome de usuário e senha.');
+  const handleCadastrarUsuario = async () => {
+    if (nome.trim() !== "" && email.trim() !== "" && senha.trim() !== "") {
+      try {
+        await cadastrarUsuario(nome, email, senha);
+        setNome("");
+        setEmail("");
+        setSenha("");
+        Keyboard.dismiss();
+      } catch (erro) {
+        console.error(erro);
       }
-    } catch (error) {
-      alert('Erro ao cadastrar usuário: ' + error.message);
     }
   };
 
   return (
     <View style={styles.container}>
-      <Logo />
-      <Text>Cadastre-se</Text>
-
+      <Text style={styles.title}>Cadastro de Usuário</Text>
       <TextInput
         style={styles.input}
-        placeholder="Nome de Usuário"
-        value={username}
-        onChangeText={(text) => setUsername(text)}
+        placeholder="Digite seu nome"
+        value={nome}
+        onChangeText={(text) => setNome(text)}
       />
       <TextInput
         style={styles.input}
-        placeholder="Email"
+        placeholder="Digite seu email"
+        keyboardType="email-address"
         value={email}
         onChangeText={(text) => setEmail(text)}
       />
       <TextInput
         style={styles.input}
-        placeholder="Senha"
+        placeholder="Digite sua senha"
         secureTextEntry
-        value={password}
-        onChangeText={(text) => setPassword(text)}
+        value={senha}
+        onChangeText={(text) => setSenha(text)}
       />
-
-      <TouchableOpacity
-        style={[styles.button, { backgroundColor: 'black' }]}
-        onPress={handleCadastro}
-      >
-        <Text style={styles.buttonText}>Cadastre-se</Text>
+      <TouchableOpacity style={styles.button} onPress={handleCadastrarUsuario}>
+        <Text style={{ color: "white" }}>Cadastrar</Text>
       </TouchableOpacity>
     </View>
   );
@@ -68,28 +61,27 @@ export default function Cadastro({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#EBC725',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#EBC725",
+  },
+  title: {
+    fontSize: 20,
+    marginBottom: 10,
   },
   input: {
+    width: 200,
     height: 40,
-    borderColor: 'gray',
+    borderColor: "gray",
     borderWidth: 1,
-    width: '80%',
-    marginVertical: 10,
-    paddingHorizontal: 10,
-    borderRadius: 8,
+    borderRadius: 5,
+    marginBottom: 10,
+    padding: 5,
   },
   button: {
+    backgroundColor: "black",
     borderRadius: 10,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    marginVertical: 10,
-  },
-  buttonText: {
-    color: 'white',
-    textAlign: 'center',
-    fontSize: 18,
+    padding: 10,
+    alignItems: "center",
   },
 });

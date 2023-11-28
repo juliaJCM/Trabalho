@@ -1,10 +1,10 @@
-import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import React from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
 
-import MyTabs from './components/MyTabs';
-import Inicio from './components/Inicio/Inicio';
-import Cadastro from './components/Cadastro/Cadastro'; // Importe o componente Cadastro
+import MyTabs from "./components/MyTabs";
+import Inicio from "./components/Inicio/Inicio";
+import Cadastro from "./components/Cadastro/Cadastro";
 
 const Stack = createStackNavigator();
 

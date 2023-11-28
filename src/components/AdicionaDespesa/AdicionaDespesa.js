@@ -1,66 +1,42 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, Button, FlatList, StyleSheet, Keyboard } from 'react-native';
-import Logo from '../Logo/Logo';
-import moment from 'moment';
-import 'moment/locale/pt-br';
-import Despesa from '../Despesa/Despesa';
-import { firebase } from '../../firebase/config';
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  FlatList,
+  StyleSheet,
+  Keyboard,
+} from "react-native";
+import Logo from "../Logo/Logo";
+import Despesa from "../Despesa/Despesa";
+import {
+  adicionarDespesa,
+  obterDespesas,
+} from "../../controllers/FirebaseController.js";
 
-const todoRef = firebase.firestore().collection('todos');
+export default function AdicionarDespesas() {
+  const [despesas, setDespesas] = useState([]);
+  const [valor, setValor] = useState("");
+  const [descricao, setDescricao] = useState("");
 
-//exlcuir despesa do banco de dados
-export const deleteTodo = (todos) => {
-    todoRef.doc(todos.id).delete()
-  }
-
-export default function GerenciarDespesas() {
-  moment.locale('pt-br');
-  const [todos, setTodos] = useState([]);
-  const [valor, setValor] = useState('');
-  const [descricao, setDescricao] = useState('');
-  const [expensesByMonth, setExpensesByMonth] = useState({});
-
-  //buscar ou ler os dados do banco
   useEffect(() => {
-  todoRef.orderBy('createdAt', 'desc').onSnapshot((querySnapshot) => {
-    const todos = [];
-    querySnapshot.forEach((doc) => {
-      const { heading, valor, createdAt } = doc.data(); // Correção aqui
-      todos.push({
-        id: doc.id,
-        heading,
-        valor,
-        createdAt,
-      });
-    });
-    setTodos(todos);
-  });
-}, []);
+    const fetchData = async () => {
+      await obterDespesas(setDespesas);
+    };
+    fetchData();
+  }, []);
 
-  //adicionar despesa ao banco de dados
-  const handleAddValor = () => {
-    //verifica se há texto escrito
-    if (valor.trim() !== '' && descricao.trim() !== '') {
-      //obtem uma timestamp
-      const timestamp = firebase.firestore.FieldValue.serverTimestamp();
-
-      const newExpense = {
-        heading: descricao,
-        valor: valor,
-        createdAt: timestamp,
-      };
-      todoRef
-          .add(newExpense)
-          .then(() => {
-            //resetar as variaveis
-            setDescricao('');
-            setValor('');
-            Keyboard.dismiss();
-          })
-           .catch((error) => {
-          // mostra uma mensagem de alerta caso ocorra algum erro
-          alert(error);
-        });
+  const handleAdicionarDespesa = () => {
+    if (valor.trim() !== "" && descricao.trim() !== "") {
+      try {
+        adicionarDespesa(descricao, valor);
+        setDescricao("");
+        setValor("");
+        Keyboard.dismiss();
+      } catch (erro) {
+        console.error(erro);
+      }
     }
   };
 
@@ -81,20 +57,19 @@ export default function GerenciarDespesas() {
         value={descricao}
         onChangeText={(text) => setDescricao(text)}
       />
-      <Button
-        title="Adicione"
-        onPress={handleAddValor}
-        color="black"
-        style={styles.button}
-      />
+      <TouchableOpacity
+        style={[styles.button, { backgroundColor: "black" }]}
+        onPress={handleAdicionarDespesa}
+      >
+        <Text style={{ color: "white" }}>Adicione</Text>
+      </TouchableOpacity>
 
       <FlatList
         style={{}}
-        data={todos}
+        data={despesas}
+        keyExtractor={(item) => item.id.toString()}
         numColumns={1}
-        renderItem={({ item }) => (
-          <Despesa item={item}/>
-        )}
+        renderItem={({ item }) => <Despesa item={item} />}
       />
     </View>
   );
@@ -103,9 +78,9 @@ export default function GerenciarDespesas() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#EBC725',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#EBC725",
   },
   title: {
     fontSize: 20,
@@ -114,15 +89,15 @@ const styles = StyleSheet.create({
   input: {
     width: 200,
     height: 40,
-    borderColor: 'gray',
+    borderColor: "gray",
     borderWidth: 1,
     borderRadius: 5,
     marginBottom: 10,
     padding: 5,
   },
- 
   button: {
     borderRadius: 10,
+    padding: 10,
+    alignItems: "center",
   },
-
 });

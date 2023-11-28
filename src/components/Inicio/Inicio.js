@@ -1,28 +1,29 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-import Logo from '../Logo/Logo';
-import { firebase } from '../../firebase/config';
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+} from "react-native";
+import Logo from "../Logo/Logo";
+import { loginUser } from "../../controllers/FirebaseController";
 
 export default function Inicio({ navigation }) {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleLogin = async () => {
     try {
-      if (username && password) {
-       
-        await firebase.auth().signInWithEmailAndPassword(username, password);
-        navigation.navigate('Tabs');
-      } else {
-        alert('Por favor, preencha o nome de usuário e senha.');
-      }
+      await loginUser(username, password);
+      navigation.navigate("Tabs");
     } catch (error) {
-      alert('Erro ao fazer login: ' + error.message);
+      alert("Erro ao fazer login: " + error.message);
     }
   };
 
   const handleCadastro = () => {
-    navigation.navigate('Cadastro');
+    navigation.navigate("Cadastro");
   };
 
   return (
@@ -45,15 +46,15 @@ export default function Inicio({ navigation }) {
       />
 
       <TouchableOpacity
-        style={[styles.button, { backgroundColor: 'black' }]}
+        style={[styles.button, { backgroundColor: "black" }]}
         onPress={handleLogin}
       >
         <Text style={styles.buttonText}>Login</Text>
       </TouchableOpacity>
 
-      <Text  style={styles.text}>Não tem uma conta?</Text>
+      <Text style={styles.text}>Não tem uma conta?</Text>
       <TouchableOpacity
-        style={[styles.button, { backgroundColor: 'black' }]}
+        style={[styles.button, { backgroundColor: "black" }]}
         onPress={handleCadastro}
       >
         <Text style={styles.buttonText}>Cadastre-se</Text>
@@ -61,19 +62,18 @@ export default function Inicio({ navigation }) {
     </View>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#EBC725',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#EBC725",
   },
   input: {
     height: 40,
-    borderColor: 'gray',
+    borderColor: "gray",
     borderWidth: 1,
-    width: '80%',
+    width: "80%",
     marginVertical: 10,
     paddingHorizontal: 10,
     borderRadius: 8,
@@ -85,11 +85,11 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   buttonText: {
-    color: 'white',
-    textAlign: 'center',
+    color: "white",
+    textAlign: "center",
     fontSize: 18,
   },
-  text:{
+  text: {
     marginTop: 100,
-  }
+  },
 });

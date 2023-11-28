@@ -1,15 +1,14 @@
-import firebase from 'firebase';
+import * as firebase from "firebase";
+import "firebase/auth";
+import "firebase/firestore";
 
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyD1i-kcbGXVNweFaHSMNS8N_2TlowVAP98",
-  authDomain: "trabalhopratico-ced1f.firebaseapp.com",
-  databaseURL: "https://trabalhopratico-ced1f-default-rtdb.firebaseio.com",
-  projectId: "trabalhopratico-ced1f",
-  storageBucket: "trabalhopratico-ced1f.appspot.com",
-  messagingSenderId: "363198012550",
-  appId: "1:363198012550:web:14702bb1df00f568710507",
-  measurementId: "G-EYL3GEZC9H"
+  apiKey: "AIzaSyCnHHKBY8q8oBrJ5_oYFSXjTD80Z8XHkts",
+  authDomain: "trabalhopratico-7c340.firebaseapp.com",
+  projectId: "trabalhopratico-7c340",
+  storageBucket: "trabalhopratico-7c340.appspot.com",
+  messagingSenderId: "1025310077592",
+  appId: "1:1025310077592:web:3f241139db69f258d3d6ed",
 };
 
 if (!firebase.apps.length) {

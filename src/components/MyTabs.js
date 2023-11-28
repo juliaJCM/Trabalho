@@ -1,9 +1,9 @@
-import React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Image } from 'react-native';
-import AdicionaDespesa from './AdicionaDespesa/AdicionaDespesa';
-import Metricas from './Metricas/Metricas';
-import Usuario from './Usuario/Usuario';
+import React from "react";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { Image } from "react-native";
+import AdicionaDespesa from "./AdicionaDespesa/AdicionaDespesa";
+import Metricas from "./Metricas/Metricas";
+import Usuario from "./Usuario/Usuario";
 
 const Tab = createBottomTabNavigator();
 
@@ -16,7 +16,7 @@ export default function MyTabs() {
         options={{
           tabBarIcon: ({ color, size }) => (
             <Image
-              source={require('../assets/casa.png')} 
+              source={require("../assets/casa.png")}
               style={{ width: size, height: size, tintColor: color }}
             />
           ),
@@ -28,7 +28,7 @@ export default function MyTabs() {
         options={{
           tabBarIcon: ({ color, size }) => (
             <Image
-              source={require('../assets/grafico.png')} 
+              source={require("../assets/grafico.png")}
               style={{ width: size, height: size, tintColor: color }}
             />
           ),
@@ -40,7 +40,7 @@ export default function MyTabs() {
         options={{
           tabBarIcon: ({ color, size }) => (
             <Image
-              source={require('../assets/usuario.png')} 
+              source={require("../assets/usuario.png")}
               style={{ width: size, height: size, tintColor: color }}
             />
           ),
