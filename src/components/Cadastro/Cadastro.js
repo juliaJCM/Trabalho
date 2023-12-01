@@ -56,7 +56,7 @@ export default function Cadastro({ navigation }) {
       />
 
       <TouchableOpacity
-        style={[styles.button, { backgroundColor: 'black' }]}
+        style={[styles.button, { backgroundColor: 'purple' }]}
         onPress={handleCadastro}
       >
         <Text style={styles.buttonText}>Cadastre-se</Text>
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#EBC725',
+    backgroundColor: '#210054',
   },
   input: {
     height: 40,

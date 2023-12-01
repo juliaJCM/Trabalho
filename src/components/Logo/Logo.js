@@ -18,7 +18,8 @@ const styles = StyleSheet.create({
   },
   logo: {
     width: 300,
-    height: 200,
+   marginTop: -75, // Set margin top to 0
+    marginBottom: -80, // Set padding top to 0
     resizeMode: 'contain',
   },
 });

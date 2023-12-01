@@ -4,18 +4,20 @@ import Logo from '../Logo/Logo';
 import { firebase } from '../../firebase/config';
 
 export default function Inicio({ navigation }) {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const username = 'ana123';
+  const password = 'ana123';
 
   const handleLogin = async () => {
     try {
-      if (username && password) {
-       
-        await firebase.auth().signInWithEmailAndPassword(username, password);
         navigation.navigate('Tabs');
-      } else {
-        alert('Por favor, preencha o nome de usuário e senha.');
-      }
+
+      // if (username && password) {
+      //   // await firebase.auth().signInWithEmailAndPassword(username, password);
+      
+      // } else {
+      //   alert('Por favor, preencha o nome de usuário e senha.');
+      // }
+
     } catch (error) {
       alert('Erro ao fazer login: ' + error.message);
     }
@@ -28,7 +30,7 @@ export default function Inicio({ navigation }) {
   return (
     <View style={styles.container}>
       <Logo />
-      <Text>Seja Bem-Vindo</Text>
+      <Text style={styles.title}>Seja Bem-Vindo</Text>
 
       <TextInput
         style={styles.input}
@@ -45,15 +47,15 @@ export default function Inicio({ navigation }) {
       />
 
       <TouchableOpacity
-        style={[styles.button, { backgroundColor: 'black' }]}
+        style={[styles.button, { backgroundColor: 'purple' }]}
         onPress={handleLogin}
       >
         <Text style={styles.buttonText}>Login</Text>
       </TouchableOpacity>
 
-      <Text  style={styles.text}>Não tem uma conta?</Text>
+      <Text style={styles.text}>Não tem uma conta?</Text>
       <TouchableOpacity
-        style={[styles.button, { backgroundColor: 'black' }]}
+        style={[styles.button, { backgroundColor: 'purple' }]}
         onPress={handleCadastro}
       >
         <Text style={styles.buttonText}>Cadastre-se</Text>
@@ -67,7 +69,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#EBC725',
+     backgroundColor: '#210054',
+    color: 'white'
   },
   input: {
     height: 40,
@@ -77,19 +80,28 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     paddingHorizontal: 10,
     borderRadius: 8,
+    color: 'white'
   },
   button: {
     borderRadius: 10,
     paddingVertical: 10,
     paddingHorizontal: 50,
     marginVertical: 10,
+    color: 'white'
   },
   buttonText: {
     color: 'white',
     textAlign: 'center',
     fontSize: 18,
+  
   },
-  text:{
+  text: {
     marginTop: 100,
+    color: 'white'
+  },
+  title:{
+    fontSize: 18,
+     fontWeight: 'bold',
+     color: 'white'
   }
 });
