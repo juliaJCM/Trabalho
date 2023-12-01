@@ -8,6 +8,10 @@ import {
   FlatList,
   StyleSheet,
 } from 'react-native';
+import { firebase } from '../../firebase/config';
+import { addRendaFixa, addRendaVariavel } from '../Funcoes'
+
+
 
 const formatCurrency = (value) => {
   let numericValue = value.replace(/[^0-9]/g, '');
@@ -16,7 +20,7 @@ const formatCurrency = (value) => {
     numericValue = `${numericValue.slice(0, -2)}.${numericValue.slice(-2)}`;
   }
 
-  const formattedValue = numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  const formattedValue = parseFloat(numericValue).toFixed(2);
 
   return formattedValue;
 };
@@ -26,29 +30,39 @@ export default function Usuario() {
   const [rendaVariavel, setRendaVariavel] = useState([]);
   const [novaRendaVariavel, setNovaRendaVariavel] = useState('');
   const [descricaoRendaVariavel, setDescricaoRendaVariavel] = useState('');
+  const todoRef = firebase.firestore().collection('todos');
+  const [todos, setTodos] = useState([]);
 
-  const handleAddRendaFixa = () => {
-    if (rendaFixa.length === 0 && rendaFixa.trim() !== '') {
-      setRendaFixa([{ valor: parseFloat(rendaFixa) }]);
+const handleAddRendaFixa = async () => {
+  if (rendaFixa.trim() !== '') {
+    try {
+      await addRendaFixa(rendaFixa);
+      setRendaFixa('');
+    } catch (error) {
     }
-  };
+  }
+};
 
-const handleAddRendaVariavel = () => {
-    if (novaRendaVariavel.trim() !== '' && descricaoRendaVariavel.trim() !== '') {
+const handleAddRendaVariavel = async () => {
+  if (novaRendaVariavel.trim() !== '' && descricaoRendaVariavel.trim() !== '') {
+    try {
+      await addRendaVariavel(novaRendaVariavel, descricaoRendaVariavel);
       setRendaVariavel([
         ...rendaVariavel,
         { valor: parseFloat(novaRendaVariavel), descricao: descricaoRendaVariavel },
       ]);
       setNovaRendaVariavel('');
       setDescricaoRendaVariavel('');
+    } catch (error) {
     }
-  };
+  }
+};
 
 
-  const handleInputChange = (text, isRendaFixa = true) => {
-    const formattedValue = formatCurrency(text);
-    isRendaFixa ? setRendaFixa(`R$ ${formattedValue}`) : setNovaRendaVariavel(formattedValue);
-  };
+const handleInputChange = (text, isRendaFixa = true) => {
+  const formattedValue = formatCurrency(text);
+  isRendaFixa ? setRendaFixa(formattedValue) : setNovaRendaVariavel(formattedValue.replace('R$', ''));
+};
 
   return (
     <View style={styles.container}>

@@ -16,6 +16,7 @@ import Metricas from '../Metricas/Metricas';
 import { firebase } from '../../firebase/config';
 import RNPickerSelect from 'react-native-picker-select';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import { handleAddValor } from '../Funcoes';
 
 const todoRef = firebase.firestore().collection('todos');
 
@@ -94,32 +95,8 @@ export default function GerenciarDespesas({todoRef}) {
     }
   };
 
-  const handleAddValor = () => {
-    if (valor.trim() !== '' && selectedCategory !== '') {
-      const timestamp = firebase.firestore.FieldValue.serverTimestamp();
-
-      const newExpense = {
-        heading: selectedCategory,
-        valor: valor,
-        createdAt: timestamp,
-        category: selectedCategory,
-      };
-
-      todoRef
-        .add(newExpense)
-        .then(() => {
-          setValor('');
-          setSelectedCategory('');
-          const formattedDate = moment().format('DD/MM/YYYY');
-          setFormattedDates((prevDates) => [...prevDates, formattedDate]);
-          Keyboard.dismiss();
-        })
-        .catch((error) => {
-          alert(error);
-        });
-    } else {
-      alert('Por favor, preencha todos os campos, incluindo a categoria.');
-    }
+  const adicionarValor = () => {
+     handleAddValor(valor, selectedCategory, todoRef, setValor, setSelectedCategory, setFormattedDates, Keyboard);
   };
 
 
@@ -169,7 +146,7 @@ export default function GerenciarDespesas({todoRef}) {
               style={pickerSelectStyles}
             />
 
-            <TouchableOpacity style={styles.addDespesa} onPress={handleAddValor}>
+            <TouchableOpacity style={styles.addDespesa} onPress={adicionarValor}>
               <Text style={styles.buttonText}>Adicione</Text>
             </TouchableOpacity>
 

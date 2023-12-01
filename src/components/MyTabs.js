@@ -5,8 +5,48 @@ import AdicionaDespesa from './AdicionaDespesa/AdicionaDespesa';
 import Metricas from './Metricas/Metricas';
 import Usuario from './Usuario/Usuario';
 import { firebase } from './../firebase/config';
+import moment from 'moment';
 
 const Tab = createBottomTabNavigator();
+
+export const handleAddValor = (
+  valor,
+  selectedCategory,
+  todoRef,
+  setValor,
+  setSelectedCategory,
+  setFormattedDates,
+  Keyboard
+) => {
+  console.log('Chamando handleAddValor');
+  console.log('valor:', valor);
+  console.log('selectedCategory:', selectedCategory);
+  if (valor.trim() !== '' && selectedCategory !== '') {
+    const timestamp = firebase.firestore.FieldValue.serverTimestamp();
+
+    const newExpense = {
+      heading: selectedCategory,
+      valor: valor,
+      createdAt: timestamp,
+      category: selectedCategory,
+    };
+
+    todoRef
+      .add(newExpense)
+      .then(() => {
+        setValor('');
+        setSelectedCategory('');
+        const formattedDate = moment().format('DD/MM/YYYY');
+        setFormattedDates((prevDates) => [...prevDates, formattedDate]);
+        Keyboard.dismiss();
+      })
+      .catch((error) => {
+        alert(error);
+      });
+  } else {
+    alert('Por favor, preencha todos os campos, incluindo a categoria.');
+  }
+};
 
 export const deleteTodo = (todoId) => {
   const todoRef = firebase.firestore().collection('todos').doc(todoId);
