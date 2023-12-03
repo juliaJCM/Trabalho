@@ -12,12 +12,11 @@ import Logo from '../Logo/Logo';
 import moment from 'moment';
 import 'moment/locale/pt-br';
 import Despesa from '../Despesa/Despesa';
-import Metricas from '../Metricas/Metricas';
 import { firebase } from '../../firebase/config';
 import RNPickerSelect from 'react-native-picker-select';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import { handleAddValor } from '../Funcoes';
-
+moment.locale('pt-br');
 const todoRef = firebase.firestore().collection('todos');
 
 export const deleteTodo = (todos) => {
@@ -36,29 +35,28 @@ const formatCurrency = (value) => {
   return formattedValue;
 };
 
-export default function GerenciarDespesas({todoRef}) {
-  moment.locale('pt-br');
+const GerenciarDespesas = ({ todoRef }) => {
   const [todos, setTodos] = useState([]);
   const [valor, setValor] = useState('');
   const [selectedMonth, setSelectedMonth] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
-  const [totalDespesas, setTotalDespesas] = useState(0);
+  const [monthlyTotalDespesas, setMonthlyTotalDespesas] = useState({});
   const [isAddingExpense, setIsAddingExpense] = useState(false);
-
   const [formattedDates, setFormattedDates] = useState([]);
-
+  const [selectedDay, setSelectedDay] = useState('');
+  const [availableDays, setAvailableDays] = useState([]);
 
   useEffect(() => {
     const unsubscribe = todoRef.orderBy('createdAt', 'desc').onSnapshot((querySnapshot) => {
       const todos = [];
       querySnapshot.forEach((doc) => {
         const { heading, valor, createdAt } = doc.data();
-       todos.push({
+        todos.push({
           id: doc.id,
           heading,
           valor,
           createdAt,
-        }); 
+        });
       });
       setTodos(todos);
     });
@@ -68,37 +66,63 @@ export default function GerenciarDespesas({todoRef}) {
 
   useEffect(() => {
     calcularTotalDespesas();
-  }, [todos]);
+  }, [todos, selectedMonth, selectedDay]);
+
+  useEffect(() => {
+    if (selectedMonth) {
+      const daysInMonth = moment().month(selectedMonth).daysInMonth();
+      const daysArray = Array.from({ length: daysInMonth }, (_, i) => (i + 1).toString());
+      setAvailableDays(daysArray);
+    } else {
+      setAvailableDays([]);
+    }
+  }, [selectedMonth]);
 
   const calcularTotalDespesas = () => {
-    const despesasUltimos30Dias = todos.filter((item) => {
-      const dataAtual = moment();
-      const dataDespesa = moment(item.createdAt?.toDate());
-      return dataDespesa && dataAtual.diff(dataDespesa, 'days') <= 30;
-    });
+    const despesasFiltradas = filtrarPorMes();
 
-    const total = despesasUltimos30Dias.reduce((acc, item) => {
+    const total = despesasFiltradas.reduce((acc, item) => {
       return acc + parseFloat(item.valor.replace('R$', '').replace(',', ''));
     }, 0);
 
-    setTotalDespesas(total);
+    setMonthlyTotalDespesas({ total });
+  };
+
+  const filtrarPorDia = (despesas, selectedMonth, selectedDay) => {
+    if (!selectedDay) {
+      return despesas;
+    }
+
+    return despesas.filter((item) => {
+      const diaDaDespesa = moment(item.createdAt.toDate()).format('D');
+      return diaDaDespesa === selectedDay;
+    });
   };
 
   const filtrarPorMes = () => {
-    if (selectedMonth === '') {
-      return todos;
+    const despesasFiltradasPorDia = filtrarPorDia(todos, selectedMonth, selectedDay);
+
+    if (!selectedMonth) {
+      const despesasUltimos30Dias = despesasFiltradasPorDia.filter((item) => {
+        const dataAtual = moment();
+        const dataDespesa = moment(item.createdAt?.toDate());
+        const diasDiferenca = dataAtual.diff(dataDespesa, 'days');
+        return dataDespesa && diasDiferenca <= 30;
+      });
+
+      return despesasUltimos30Dias;
     } else {
-      return todos.filter((item) => {
+      return despesasFiltradasPorDia.filter((item) => {
         const mesDaDespesa = moment(item.createdAt.toDate()).format('MMMM');
-        return mesDaDespesa === selectedMonth;
+        const normalizedMesDaDespesa = mesDaDespesa.toLowerCase();
+        return normalizedMesDaDespesa === selectedMonth.toLowerCase();
       });
     }
   };
 
   const adicionarValor = () => {
-     handleAddValor(valor, selectedCategory, todoRef, setValor, setSelectedCategory, setFormattedDates, Keyboard);
+    handleAddValor(valor, selectedCategory, todoRef, setValor, setSelectedCategory, setFormattedDates, Keyboard);
   };
-
 
   const handleInputChange = (text) => {
     const formattedValue = formatCurrency(text);
@@ -112,109 +136,123 @@ export default function GerenciarDespesas({todoRef}) {
   const closeExpenseForm = () => {
     setIsAddingExpense(false);
   };
- <Metricas formattedDates={formattedDates} />
+
   return (
     <View style={styles.container}>
-      <Logo />
+      <View style={styles.containerAdc}>
+        <Logo />
 
-      {isAddingExpense && (
-        <View style={styles.overlay}>
-          <View style={styles.inputsDespesa}>
-            <TextInput
-              style={styles.input}
-              placeholder="Adicione o valor da despesa:"
-              keyboardType="numeric"
-              value={valor}
-              onChangeText={handleInputChange}
-            />
+        {isAddingExpense && (
+          <View style={styles.overlay}>
+            <View style={styles.inputsDespesa}>
+              <TextInput
+                style={styles.input}
+                placeholder="Adicione o valor da despesa:"
+                keyboardType="numeric"
+                value={valor}
+                onChangeText={handleInputChange}
+              />
 
-            <RNPickerSelect
-              placeholder={{ label: 'Selecione a categoria', value: '' }}
-              items={[
-                { label: 'Moradia', value: 'Moradia' },
-                { label: 'Transporte', value: 'Transporte' },
-                { label: 'Mercado', value: 'Mercado' },
-                { label: 'Lazer', value: 'Lazer' },
-                { label: 'Compras Online', value: 'Compras Online' },
-                { label: 'Seguro', value: 'Seguro' },
-                { label: 'Alimentação', value: 'Alimentação' },
-                { label: 'Farmácia', value: 'Farmácia' },
-                { label: 'Streaming', value: 'Streaming' },
-                { label: 'Outros', value: 'Outros' },
-              ]}
-              onValueChange={(itemValue) => setSelectedCategory(itemValue)}
-              style={pickerSelectStyles}
-            />
+              <RNPickerSelect
+                placeholder={{ label: 'Selecione a categoria', value: '' }}
+                items={[
+                  { label: 'Moradia', value: 'Moradia' },
+                  { label: 'Transporte', value: 'Transporte' },
+                  { label: 'Mercado', value: 'Mercado' },
+                  { label: 'Lazer', value: 'Lazer' },
+                  { label: 'Compras Online', value: 'Compras Online' },
+                  { label: 'Seguro', value: 'Seguro' },
+                  { label: 'Alimentação', value: 'Alimentação' },
+                  { label: 'Farmácia', value: 'Farmácia' },
+                  { label: 'Streaming', value: 'Streaming' },
+                  { label: 'Outros', value: 'Outros' },
+                ]}
+                onValueChange={(itemValue) => setSelectedCategory(itemValue)}
+                style={pickerSelectStyles}
+              />
 
-            <TouchableOpacity style={styles.addDespesa} onPress={adicionarValor}>
-              <Text style={styles.buttonText}>Adicione</Text>
-            </TouchableOpacity>
+              <TouchableOpacity style={styles.addDespesa} onPress={adicionarValor}>
+                <Text style={styles.buttonText}>Adicione</Text>
+              </TouchableOpacity>
 
-            <TouchableOpacity style={styles.closeButton} onPress={closeExpenseForm}>
-              <FontAwesomeIcon name="times-circle" size={30} color="white" />
-            </TouchableOpacity>
+              <TouchableOpacity style={styles.closeButton} onPress={closeExpenseForm}>
+                <FontAwesomeIcon name="times-circle" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
-      )}
+        )}
 
-      <View style={styles.linhaAdc}>
-        <RNPickerSelect
-          placeholder={{ label: 'Filtrar por mês', value: '' }}
-          items={[
-            { label: 'Janeiro', value: 'Janeiro' },
-            { label: 'Fevereiro', value: 'Fevereiro' },
-            { label: 'Março', value: 'Março' },
-            { label: 'Abril', value: 'Abril' },
-            { label: 'Maio', value: 'Maio' },
-            { label: 'Junho', value: 'Junho' },
-            { label: 'Julho', value: 'Julho' },
-            { label: 'Agosto', value: 'Agosto' },
-            { label: 'Setembro', value: 'Setembro' },
-            { label: 'Outubro', value: 'Outubro' },
-            { label: 'Novembro', value: 'Novembro' },
-            { label: 'Dezembro', value: 'Dezembro' },
-          ]}
-          onValueChange={(itemValue) => setSelectedMonth(itemValue)}
-          style={{ ...pickerSelectStylesMonth }}
-        />
-        <TouchableOpacity style={styles.addButton} onPress={toggleAddingExpense}>
-          <FontAwesomeIcon
-            name={isAddingExpense ? 'times-circle' : 'plus-circle'}
-            size={30}
-            color="white"
-          />
+        <TouchableOpacity style={styles.addDespesa} onPress={toggleAddingExpense}>
+          <Text style={styles.buttonText}>Adicione</Text>
         </TouchableOpacity>
-      </View>
 
-      <View style={styles.listDespesas}>
-        <FlatList
-          data={filtrarPorMes()}
-          numColumns={1}
-          keyboardShouldPersistTaps="handled"
-          renderItem={({ item }) => (
-    <Despesa
-      item={item}
-      onCategorySelected={(category) => {
-        setSelectedCategory(category);
-      }}
-      onDateSelected={(date) => {
-      
-        setFormattedDates((prevDates) => [
-          ...prevDates,
-          { date, item }, 
-        ]);
-      }}
-    />
-  )}
-/>
-        <View style={styles.separator} />
-        <Text style={styles.totalDespesasText}>
-          Total (últimos 30 dias): R$ {totalDespesas.toFixed(2)}
-        </Text>
+        <View style={styles.pickerContainer}>
+          <RNPickerSelect
+            placeholder={{ label: 'Filtrar por mês', value: '' }}
+            items={[
+              { label: 'Janeiro', value: 'Janeiro' },
+              { label: 'Fevereiro', value: 'Fevereiro' },
+              { label: 'Março', value: 'Março' },
+              { label: 'Abril', value: 'Abril' },
+              { label: 'Maio', value: 'Maio' },
+              { label: 'Junho', value: 'Junho' },
+              { label: 'Julho', value: 'Julho' },
+              { label: 'Agosto', value: 'Agosto' },
+              { label: 'Setembro', value: 'Setembro' },
+              { label: 'Outubro', value: 'Outubro' },
+              { label: 'Novembro', value: 'Novembro' },
+              { label: 'Dezembro', value: 'Dezembro' },
+            ]}
+            onValueChange={(itemValue) => setSelectedMonth(itemValue)}
+            style={{ ...pickerSelectStylesMonth }}
+          />
+
+          <RNPickerSelect
+            placeholder={{ label: 'Filtrar por dia', value: '' }}
+            items={[
+              ...availableDays.map((day) => ({ label: day, value: day })),
+            ]}
+            onValueChange={(itemValue) => setSelectedDay(itemValue)}
+            style={{ ...pickerSelectStylesMonth }}
+          />
+        </View>
+
+        <View style={styles.listDespesa}>
+          <FlatList
+            data={filtrarPorMes()}
+            numColumns={1}
+            keyboardShouldPersistTaps="handled"
+            renderItem={({ item }) => (
+              <Despesa
+                item={item}
+                onCategorySelected={(category) => {
+                  setSelectedCategory(category);
+                }}
+                onDateSelected={(date) => {
+                  setFormattedDates((prevDates) => [
+                    ...prevDates,
+                    { date, item },
+                  ]);
+                }}
+              />
+            )}
+          />
+          <View style={styles.separator} />
+
+          {Object.entries(monthlyTotalDespesas).map(([month, total]) => (
+            <Text key={month} style={styles.totalDespesasText}>
+              Total ({month}): R$ {total.toFixed(2)}
+            </Text>
+          ))}
+        </View>
       </View>
     </View>
   );
-}
+};
+
+export default GerenciarDespesas;
+
+
 const pickerSelectStyles = StyleSheet.create({
   input: {},
   inputIOS: {
@@ -248,7 +286,7 @@ const pickerSelectStyles = StyleSheet.create({
 const pickerSelectStylesMonth = StyleSheet.create({
   input: {},
   inputIOS: {
-    width: 200,
+    width: 150,
     height: 40,
     borderColor: 'gray',
     borderWidth: 1,
@@ -259,7 +297,7 @@ const pickerSelectStylesMonth = StyleSheet.create({
     marginBottom: 10,
     borderWidth: 1,
     padding: 5,
-    color: 'white',
+    color: 'black',
     backgroundColor: 'transparent',
   },
   inputAndroid: {
@@ -273,38 +311,47 @@ const pickerSelectStylesMonth = StyleSheet.create({
     marginBottom: 10,
     borderWidth: 1,
     padding: 5,
-    color: 'white',
+    color: 'black',
     backgroundColor: 'transparent',
   },
 });
+
+
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+        flex: 1,
+    justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: '#210054',
-    color: 'white',
-    paddingTop: 20, // Adicione um padding superior
+ 
   },
 
   buttonText: {
+    flex: 12,
     color: 'white',
     textAlign: 'center',
     fontSize: 18,
+    width: '100%',
   },
-  listDespesas: {
-    backgroundColor: '#DCDCDC',
-    borderRadius: 10,
-    marginBottom: 15,
-    width: '90%',
-    flex: 12,
+  containerAdc: {
+     borderRadius: 10,
+    backgroundColor: '#F0F0F0',
+    height: '95%',
+   width: '90%',
+    alignItems: 'center',
+   marginTop: 20,
+    padding: 30,
     shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5, // Apenas para Android
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 1,
+    shadowRadius: 2,
+  
+  },
+  listDespesa:{
+    flex:12,
+    width: '100%'
   },
   separator: {
     borderBottomColor: '#A9A9A9',
@@ -333,15 +380,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
 
-  addButton: {
-    borderRadius: 50,
-    backgroundColor: 'purple',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: 60,
-    height: 60,
-    marginLeft: 100,
-  },
 
   overlay: {
     ...StyleSheet.absoluteFillObject,
@@ -353,20 +391,15 @@ const styles = StyleSheet.create({
 
   addDespesa: {
     borderRadius: 10,
-    width: '50%',
+    flexDirection: 'row',
     padding: 10,
     marginVertical: 10,
-    backgroundColor: 'purple',
+    backgroundColor: '#6052b7',
     color: 'white',
   },
-
-  linhaAdc: {
-    flexDirection: 'row',
-  },
-
   closeButton: {
     borderRadius: 50,
-    backgroundColor: 'purple',
+    backgroundColor: '#6052b7',
     alignItems: 'center',
     justifyContent: 'center',
     width: 50,
@@ -379,6 +412,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 30,
     borderRadius: 10,
-    width: 300, // Ajuste conforme necessário
+    width: 300, 
   },
+  pickerContainer:{
+    flexDirection:'row',
+    alignContent:'center',
+    alignItems: 'center,'
+  }
 });

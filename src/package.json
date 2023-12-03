@@ -36,7 +36,10 @@
     "@react-native-firebase/firestore": "*",
     "@react-native-community/masked-view": "*",
     "@react-navigation/material-top-tabs": "6.2.1",
-    "@react-navigation/material-bottom-tabs": "6.2.1"
+    "@react-navigation/material-bottom-tabs": "6.2.1",
+    "@react-native-async-storage/async-storage": "1.17.11",
+    "react-native-date-picker": "*",
+    "react-native-masked-text": "*"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

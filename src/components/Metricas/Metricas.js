@@ -1,85 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity  } from 'react-native';
 import { PieChart } from 'react-native-chart-kit';
 import RNPickerSelect from 'react-native-picker-select';
 import Despesa from '../Despesa/Despesa';
 import 'moment/locale/pt-br';
+import moment from 'moment';
 
 
-const Metricas = ({ todoRef }) => {
+export default function Metricas({ todoRef }) {
   const [data, setData] = useState([]);
   const [allExpenses, setAllExpenses] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
-  const [selectedExpenses, setSelectedExpenses] = useState([]);
-
-  useEffect(() => {
-    const unsubscribe = todoRef.onSnapshot((querySnapshot) => {
-      const todos = [];
-      querySnapshot.forEach((doc) => {
-        const { heading, valor, createdAt } = doc.data();
-        todos.push({ heading, valor, createdAt: createdAt.toDate() });
-      });
-
-      console.log('Todos:', todos);
-
-      setAllExpenses(todos);
-    });
-
-    return () => unsubscribe();
-  }, []);
-
-  useEffect(() => {
-    const calcularDespesasPorCategoria = (todos, categoryFilter) => {
-      const filteredTodos = todos.filter(
-        (item) => !categoryFilter || item.heading === categoryFilter
-      );
-
-      console.log('Filtered Todos:', filteredTodos);
-
-      const categories = {};
-
-      filteredTodos.forEach((item) => {
-        const category = item.heading;
-        const value = parseFloat(
-          item.valor.replace('R$', '').replace(',', '')
-        );
-
-        if (categories[category]) {
-          categories[category].value += value;
-        } else {
-          categories[category] = { value, data: [] };
-        }
-
-        categories[category].data.push({ date: item.createdAt, value });
-      });
-
-      const resultData = Object.keys(categories).map((category, index) => ({
-        name: category,
-        population: categories[category].value,
-        data: categories[category].data,
-        color: getRandomColor(),
-        legendFontColor: 'black',
-        legendFontSize: 12,
-      }));
-
-      console.log('Result Data:', resultData);
-
-      return resultData;
-    };
-
-    setData(calcularDespesasPorCategoria(allExpenses, selectedCategory));
-  }, [selectedCategory, allExpenses]);
-
-  useEffect(() => {
-    const fetchSelectedExpenses = () => {
-      const selectedCategoryExpenses = allExpenses.filter(
-        (item) => !selectedCategory || item.heading === selectedCategory
-      );
-      setSelectedExpenses(selectedCategoryExpenses);
-    };
-
-    fetchSelectedExpenses();
-  }, [selectedCategory, allExpenses]);
+    const [selectedInterval, setSelectedInterval] = useState('year'); // Add this line
 
 
   const getRandomColor = () => {
@@ -91,56 +23,205 @@ const Metricas = ({ todoRef }) => {
     return color;
   };
 
-const renderDespesa = (expense, expenseIndex) => (
-  <Despesa
-    key={expenseIndex}
-    item={expense}
-    onCategorySelected={(category) => {
-      setSelectedCategory(category);
-    }}
-    onDateSelected={(date) => {
-      setFormattedDates((prevDates) => [
-        ...prevDates,
-        { date, expense },
-      ]);
-    }}
-  />
-);
+  const formatLabel = (date, interval) => {
+    if (interval === 'day') {
+      return moment(date).format('DD/MM/YYYY'); // Format for daily interval
+    } else if (interval === 'Semana') {
+      return `Semana ${moment(date).format('WW/YYYY')}`; // Format for weekly interval
+    } else if (interval === 'month') {
+      return moment(date).format('MMM-YYYY'); // Format for monthly interval
+    }
+    return '';
+  };
 
-   const formatDate = (dateString) => {
-      try {
-        const date = new Date(dateString);
+const calcularDespesasPorSemana = (todos, categoryFilter) => {
+    const filteredTodos = todos.filter(
+      (item) => item.heading && (!categoryFilter || item.heading === categoryFilter)
+    );
 
-        if (isNaN(date.getTime())) {
-       
-          return 'Data inválida';
-        }
+    const weeks = {};
 
-    
-        const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const year = String(date.getFullYear()).slice(-2);
+    filteredTodos.forEach((item) => {
+      const createdAtDate = item.createdAt && item.createdAt.toDate
+        ? moment(item.createdAt.toDate()).toDate()
+        : item.createdAt instanceof Date
+          ? item.createdAt
+          : new Date();
 
-        return `${day}/${month}/${year}`;
-      } catch (error) {
-        console.error('Error formatting date:', error);
-        return 'Erro ao formatar data';
+      const week = moment(createdAtDate).format('YYYY-[W]WW');
+
+      const value = typeof item.valor === 'string' ? parseFloat(item.valor.replace('R$', '').replace(',', '')) : 0;
+
+      if (weeks[week]) {
+        weeks[week] += value;
+      } else {
+        weeks[week] = value;
+      }
+    });
+
+    const resultData = Object.keys(weeks).map((week) => ({
+      name: formatLabel(moment(week, 'YYYY-WW').toDate(), selectedInterval),
+      population: weeks[week],
+      color: getRandomColor(),
+      legendFontColor: 'black',
+      legendFontSize: 12,
+    }));
+
+    return resultData;
+  };
+
+  const calcularDespesasPorMes = (todos, categoryFilter) => {
+    const filteredTodos = todos.filter(
+      (item) => item.heading && (!categoryFilter || item.heading === categoryFilter)
+    );
+
+    const months = {};
+
+    filteredTodos.forEach((item) => {
+      const createdAtDate = item.createdAt && item.createdAt.toDate
+        ? moment(item.createdAt.toDate()).toDate()
+        : item.createdAt instanceof Date
+          ? item.createdAt
+          : new Date();
+
+      const month = moment(createdAtDate).format('YYYY-MM');
+
+      const value = typeof item.valor === 'string' ? parseFloat(item.valor.replace('R$', '').replace(',', '')) : 0;
+
+      if (months[month]) {
+        months[month] += value;
+      } else {
+        months[month] = value;
+      }
+    });
+
+     const resultData = Object.keys(months).map((month) => ({
+      name: formatLabel(moment(month).toDate(), selectedInterval),
+      population: months[month],
+      color: getRandomColor(),
+      legendFontColor: 'black',
+      legendFontSize: 12,
+    }));
+
+    return resultData;
+  };
+
+  const calcularDespesasPorDia = (todos, categoryFilter) => {
+    const filteredTodos = todos.filter(
+      (item) => item.heading && (!categoryFilter || item.heading === categoryFilter)
+    );
+
+    const days = {};
+
+    filteredTodos.forEach((item) => {
+      const createdAtDate = item.createdAt && item.createdAt.toDate
+        ? moment(item.createdAt.toDate()).toDate()
+        : item.createdAt instanceof Date
+          ? item.createdAt
+          : new Date();
+
+      const day = moment(createdAtDate).format('YYYY-MM-DD');
+
+      const value = typeof item.valor === 'string' ? parseFloat(item.valor.replace('R$', '').replace(',', '')) : 0;
+
+      if (days[day]) {
+        days[day] += value;
+      } else {
+        days[day] = value;
+      }
+    });
+
+    const resultData = Object.keys(days).map((day) => ({
+      name: formatLabel(moment(day).toDate(), selectedInterval),
+      population: days[day],
+      color: getRandomColor(),
+      legendFontColor: 'black',
+      legendFontSize: 12,
+    }));
+
+    return resultData;
+  };
+
+  const filtrarPorCategoria = (todos) => {
+    if (!selectedCategory) {
+      return todos;
+    } else {
+      return todos.filter((item) => {
+        return item.heading && item.heading.toLowerCase() === selectedCategory.toLowerCase();
+      });
+    }
+  };
+
+ useEffect(() => {
+    const unsubscribe = todoRef.onSnapshot((querySnapshot) => {
+      const todos = [];
+      querySnapshot.forEach((doc) => {
+        const { heading, valor, createdAt } = doc.data();
+        const createdAtDate = createdAt && createdAt.toDate ? moment(createdAt.toDate()).toDate() : null;
+
+        todos.push({ heading, valor, createdAt: createdAtDate });
+      });
+
+      setAllExpenses(todos);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    const fetchSelectedExpenses = () => {
+      const filteredTodos = filtrarPorCategoria(allExpenses);
+
+      if (selectedInterval === 'Semana') {
+        const weeklyData = calcularDespesasPorSemana(filteredTodos, selectedCategory);
+        setData(weeklyData);
+      } else if (selectedInterval === 'month') {
+        const monthlyData = calcularDespesasPorMes(filteredTodos, selectedCategory);
+        setData(monthlyData);
+      } else {
+        const dailyData = calcularDespesasPorDia(filteredTodos, selectedCategory);
+        setData(dailyData);
       }
     };
+
+    fetchSelectedExpenses();
+  }, [selectedCategory, allExpenses, selectedInterval]);
+
   return (
     <View style={styles.container}>
-
-      <RNPickerSelect
-        onValueChange={(value) => setSelectedCategory(value)}
-        items={[
-          { label: 'Todas as Categorias', value: '' },
-          ...[...new Set(allExpenses.map(item => item.heading))].map((category) => ({ label: category, value: category })),
-        ]}
-        style={pickerSelectStyles}
-        value={selectedCategory}
-      />
-   
       <View style={styles.chartContainer}>
+        <View style={styles.buttonContainer}>
+       <TouchableOpacity
+  style={[styles.intervalButton, selectedInterval === 'day' && styles.selectedButton]}
+  onPress={() => setSelectedInterval('day')}
+>
+  <Text>Dia</Text>
+</TouchableOpacity>
+<TouchableOpacity
+  style={[styles.intervalButton, selectedInterval === 'Semana' && styles.selectedButton]}
+  onPress={() => setSelectedInterval('Semana')}
+>
+  <Text>Semana</Text>
+</TouchableOpacity>
+<TouchableOpacity
+  style={[styles.intervalButton, selectedInterval === 'month' && styles.selectedButton]}
+  onPress={() => setSelectedInterval('month')}
+>
+  <Text>Mês</Text>
+          </TouchableOpacity>
+          
+        </View>
+
+        <RNPickerSelect
+          onValueChange={(value) => setSelectedCategory(value)}
+          items={[
+            { label: 'Todas as Categorias', value: '' },
+            ...[...new Set(allExpenses.map((item) => item.heading))].map((category) => ({ label: category, value: category })),
+          ]}
+          style={pickerSelectStyles}
+          value={selectedCategory}
+        />
+
         <Text style={styles.title}>Despesas por categoria</Text>
         <PieChart
           data={data}
@@ -170,43 +251,52 @@ const renderDespesa = (expense, expenseIndex) => (
             <Text style={styles.expensesTitle}>Despesas para a categoria: {selectedCategory}</Text>
             <View style={styles.listDespesas}>
               <FlatList
-                data={data.find((categoryData) => categoryData.name === selectedCategory)?.data || []}
+                data={filtrarPorCategoria(allExpenses)}
                 numColumns={1}
                 keyboardShouldPersistTaps="handled"
-                renderItem={({ item: expense, index: expenseIndex }) => renderDespesa(expense, expenseIndex)}
+                renderItem={({ item }) => (
+                  <Despesa
+                    item={item}
+                    onCategorySelected={(category) => {
+                      setSelectedCategory(category);
+                    }}
+                    onDateSelected={(date) => {
+                      // handle date selection if needed
+                    }}
+                  />
+                )}
               />
             </View>
           </View>
-        
         )}
       </View>
     </View>
   );
-};
+}
 
 
 const pickerSelectStyles = StyleSheet.create({
   inputIOS: {
-    width: '80%',
-    height: 40,
+    width: '100%',
+    height: 50,
     borderColor: 'gray',
     borderWidth: 1,
     borderRadius: 5,
-    marginLeft: 40,
-    marginTop: 10,
+   
+    marginBottom: 20,
     borderWidth: 1,
     padding: 5,
     color: 'black',
     backgroundColor: 'transparent',
   },
   inputAndroid: {
-   width: '80%',
-    height: 40,
+    width: '100%',
+    height: 50,
     borderColor: 'gray',
     borderWidth: 1,
     borderRadius: 5,
-    marginLeft: 40,
-    marginTop: 10,
+  
+    marginBottom: 20,
     borderWidth: 1,
     padding: 5,
     color: 'black',
@@ -216,11 +306,12 @@ const pickerSelectStyles = StyleSheet.create({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+        flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: '#210054',
-    paddingTop: 20,
+    paddingTop: 5,
+   
   },
   title: {
     fontSize: 20,
@@ -228,12 +319,12 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   chartContainer: {
-    borderRadius: 10,
+   borderRadius: 10,
     backgroundColor: '#F0F0F0',
-    height: 800,
-    width: 330,
+    height: '95%',
+   width: '90%',
     alignItems: 'center',
-    marginTop: 30,
+   marginTop: 20,
     padding: 30,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -242,45 +333,51 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
   expensesContainer: {
-    width: 300,
-    marginTop: 20,
+    width: '100%',
+    marginTop: 5,
       backgroundColor: '#F0F0F0',
     borderRadius: 10,
     padding: 10,
-    marginBottom: 10,
+   
   },
   expensesTitle: {
-    fontSize: 18,
+    fontSize: 15,
     fontWeight: 'bold',
     color: 'black',
     marginBottom: 10,
   },
-  expensesItem: {
-    
+  listDespesas:{
+
   },
-  categoryName: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
-  },
-  totalValue: {
-    fontSize: 14,
-    color: '#666',
-  },
-  expenseItem: {
+   buttonContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginTop: 5,
+    justifyContent: 'space-around',
+    marginBottom: 10,
   },
-  expenseDate: {
-    fontSize: 14,
-    color: '#444',
+  intervalButton: {
+    padding: 10,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: '#ccc',
   },
-  expenseValue: {
-    fontSize: 14,
-    color: '#222',
+
+ buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginBottom: 10,
+  },
+  intervalButton: {
+    padding: 10,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    width: '33%'
+  },
+  selectedButton: {
+    backgroundColor: '#6052b7',
+    color: 'white',
+    
   },
 });
 
-export default Metricas;
+

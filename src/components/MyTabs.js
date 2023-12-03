@@ -1,9 +1,11 @@
 import React, { useState, useEffect,  } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Image } from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import AdicionaDespesa from './AdicionaDespesa/AdicionaDespesa';
 import Metricas from './Metricas/Metricas';
 import Usuario from './Usuario/Usuario';
+import Metas from './Metas/Metas';
 import { firebase } from './../firebase/config';
 import moment from 'moment';
 
@@ -93,43 +95,52 @@ export default function MyTabs() {
 
     <Tab.Navigator>
       <Tab.Screen
-        name="Adicione Despesa"
+        name="Despesas"
         options={{
           tabBarIcon: ({ color, size }) => ( 
             <Image
               source={require('../assets/casa.png')}
-              style={{ width: size, height: size, tintColor: color }}
+              style={{ width: size, height: size, tintColor: '#6052b7' }}
             />
           ),
         }}
       >
         {(props) => <AdicionaDespesa {...props}  todoRef={todoRef}/>}
       </Tab.Screen>
+
       <Tab.Screen
-        name="Suas Metricas"
+         name="Metricas"
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Image
-              source={require('../assets/grafico.png')}
-              style={{ width: size, height: size, tintColor: color }}
-            />
+            <Ionicons name="analytics" size={size} color="#6052b7" style={{ tintColor: color }} />
           ),
         }}
       >
+         
         {(props) => <Metricas {...props} todoRef={todoRef}/>}
       </Tab.Screen>
-      <Tab.Screen
-        name="Usuario"
-        component={Usuario}
+      
+       <Tab.Screen
+        name="Minha conta"
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Image
-              source={require('../assets/usuario.png')}
-              style={{ width: size, height: size, tintColor: color }}
-            />
+            <Ionicons name="person-circle" size={size} color="#6052b7" style={{ tintColor: color }} />
           ),
         }}
-      />
+      >
+        {(props) => <Usuario {...props} />}
+      </Tab.Screen>
+      
+     <Tab.Screen
+        name="Metas"
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="bar-chart" size={size} color="#6052b7" style={{ tintColor: color }} />
+          ),
+        }}
+      >
+        {(props) => <Metas {...props} />}
+      </Tab.Screen>
     </Tab.Navigator>
   );
 }

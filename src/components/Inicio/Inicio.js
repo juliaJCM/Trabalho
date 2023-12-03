@@ -47,7 +47,7 @@ export default function Inicio({ navigation }) {
       />
 
       <TouchableOpacity
-        style={[styles.button, { backgroundColor: 'purple' }]}
+        style={[styles.button, { backgroundColor: '#6052b7' }]}
         onPress={handleLogin}
       >
         <Text style={styles.buttonText}>Login</Text>
@@ -55,7 +55,7 @@ export default function Inicio({ navigation }) {
 
       <Text style={styles.text}>Não tem uma conta?</Text>
       <TouchableOpacity
-        style={[styles.button, { backgroundColor: 'purple' }]}
+        style={[styles.button, { backgroundColor: '#6052b7' }]}
         onPress={handleCadastro}
       >
         <Text style={styles.buttonText}>Cadastre-se</Text>
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
   button: {
     borderRadius: 10,
     paddingVertical: 10,
-    paddingHorizontal: 50,
+    paddingHorizontal: 100,
     marginVertical: 10,
     color: 'white'
   },

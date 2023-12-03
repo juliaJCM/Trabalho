@@ -56,7 +56,7 @@ export default function Cadastro({ navigation }) {
       />
 
       <TouchableOpacity
-        style={[styles.button, { backgroundColor: 'purple' }]}
+        style={[styles.button, { backgroundColor: '#6052b7' }]}
         onPress={handleCadastro}
       >
         <Text style={styles.buttonText}>Cadastre-se</Text>
