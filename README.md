@@ -12,6 +12,7 @@ Descrever resumidamente, em um ou dois parágrafos, o projeto que está sendo de
 
 * Ana Luiza de Sousa Silva
 * Breno Henrique Silva Carvalho
+* Francisco Henrique de Moura
 * Júlia Claudino Miranda
 * Pedro Henrique Almeida Carvalho
 
