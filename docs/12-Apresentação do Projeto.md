@@ -10,7 +10,7 @@ Se Controli
 
 ## Identidade Visual (Marca, Design)
 
-
+![Gráfico de Gantt](src/assets/logo.png)
 
 ## Conjunto de Slides (Estrutura)
 
