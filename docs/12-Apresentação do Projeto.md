@@ -16,3 +16,4 @@ O grupo deve ter o cuidado em utilizar figuras, imagens, e cores dentro do conte
 
 O grupo deve distribuir de forma coerente o conteúdo a ser apresentado, dentro do tempo determinado. Importante ressaltar a importância da descrição clara de todo o andamento do projeto, insumos gerados e requisitos atendidos.
 
+[Se Controli.pdf](https://github.com/juliaJCM/Trabalho/files/13629473/Se.Controli.pdf)
