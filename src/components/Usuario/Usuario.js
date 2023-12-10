@@ -9,7 +9,9 @@ import {
   StyleSheet,
 } from 'react-native';
 import { firebase } from '../../firebase/config';
-import { addRendaFixa, addRendaVariavel, deleteTodo } from '../Funcoes';
+import { addRendaFixa, addRendaVariavel, deleteTodo } from '../Funcoes/Funcoes';
+import ItemRendaVariavel from './ItemRendaVariavel'
+import Button from '../button';
 import moment from 'moment';
 
 const todoRef = firebase.firestore().collection('todos');
@@ -185,27 +187,17 @@ export default function Usuario() {
                     onChangeText={(text) => setDescricaoRendaVariavel(text)}
                   />
                 </View>
-                <TouchableOpacity style={styles.button} onPress={handleAddRendaVariavel}>
-                  <Text style={styles.buttonText}>Adicionar</Text>
-                </TouchableOpacity>
+                 <Button onPress={handleAddRendaVariavel} buttonText="Adicionar" />
+             
               </View>
               {/* Renda Variável adicionada */}
-              <FlatList
-              data={rendaVariavel}
-              keyExtractor={(item) => item.id}
-              renderItem={({ item, index }) => (
-                <View key={index} style={styles.listItem}>
-                  <View style={{ flex: 12 }}>
-                    <Text style={styles.textVariavel}>{item.descricao}:</Text>
-                  </View>
-                  <View style={{ flex: 6 }}>
-                    <Text style={styles.textVariavelMoney}>R$ {item.valor.toFixed(2)}</Text>
-                    <TouchableOpacity onPress={() => handleDeleteRenda(item.id)}>
-                      <Text style={{ color: 'red', fontSize: 14 }}>Excluir</Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              )}
+               <FlatList
+                data={rendaVariavel}
+                keyExtractor={(item) => item.id}
+                renderItem={({ item, index }) => (
+                  <ItemRendaVariavel item={item} onDelete={handleDeleteRenda} key={index} />
+                )}
+              
               />
             </View>
           </View>
@@ -294,24 +286,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 16,
   },
-  listItem: {
-    padding: 20,
-    flexDirection: 'row',   
-      borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-      
-  },
-  textVariavel: {
-    fontWeight: 'bold',
-    fontSize: 15,
- 
-   
-  },
-  textVariavelMoney:{
-    color: 'green',
-    fontSize: 15,
-     fontWeight: 'bold',
-  },
+
   inputContainer: {
      width: '100%',
     flexDirection: 'column',

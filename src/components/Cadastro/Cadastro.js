@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import Logo from '../Logo/Logo';
 import { firebase } from '../../firebase/config';
+import Button from '../button';
 
 export default function Cadastro({ navigation }) {
   const [username, setUsername] = useState('');
@@ -9,26 +10,36 @@ export default function Cadastro({ navigation }) {
   const [email, setEmail] = useState('');
 
   const handleCadastro = async () => {
-    try {
-      if (username && password && email) {
-       
-        await firebase.auth().createUserWithEmailAndPassword(email, password);
-
+  try {
+    console.log('Tentando cadastrar usuário...');
+    if (username && password && email) {
+      console.log('Informações preenchidas. Criando usuário...');
       
+      await firebase.auth().createUserWithEmailAndPassword(email, password);
+      
+      const userId = userCredential.user.uid;
+        await firebase.database().ref(`users/${userId}`).set({
+          username: username,
+          email: email,
+        });
+
         const user = firebase.auth().currentUser;
         await user.updateProfile({
           displayName: username,
         });
 
-        alert('Cadastro realizado com sucesso!');
-        navigation.navigate('Inicio');
-      } else {
-        alert('Por favor, preencha o email, nome de usuário e senha.');
-      }
-    } catch (error) {
-      alert('Erro ao cadastrar usuário: ' + error.message);
+      console.log('Cadastro realizado com sucesso!');
+      alert('Cadastro realizado com sucesso!');
+      navigation.navigate('Inicio');
+    } else {
+      console.log('Campos não preenchidos.');
+      alert('Por favor, preencha o email, nome de usuário e senha.');
     }
-  };
+  } catch (error) {
+    console.error('Erro ao cadastrar usuário:', error.message);
+    alert('Erro ao cadastrar usuário: ' + error.message);
+  }
+};
 
   return (
     <View style={styles.container}>
@@ -54,13 +65,10 @@ export default function Cadastro({ navigation }) {
         value={password}
         onChangeText={(text) => setPassword(text)}
       />
-
-      <TouchableOpacity
-        style={[styles.button, { backgroundColor: '#6052b7' }]}
-        onPress={handleCadastro}
-      >
-        <Text style={styles.buttonText}>Cadastre-se</Text>
-      </TouchableOpacity>
+        <View style={styles.btns}>
+          <Button onPress={handleCadastro} buttonText="Cadastre-se" />
+      </View>
+     
     </View>
   );
 }
@@ -81,15 +89,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderRadius: 8,
   },
-  button: {
-    borderRadius: 10,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    marginVertical: 10,
-  },
-  buttonText: {
-    color: 'white',
-    textAlign: 'center',
-    fontSize: 18,
+  btns: {
+    
+    width: '80%',
+  
   },
 });

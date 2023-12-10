@@ -1,141 +1,361 @@
-import React, { useState } from 'react';
-import { View, FlatList, Text, TextInput, TouchableOpacity, StyleSheet, Switch } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  TextInput,
+  Keyboard,
+  Alert,
+  Modal,
+  TouchableOpacity,
+} from 'react-native';
+import moment from 'moment';
 import MetasItem from './MetasItem';
-import MaskedInput from 'react-native-masked-text';
+import { TextInputMask } from 'react-native-masked-text';
+import { firebase } from '../../firebase/config';
+import RNPickerSelect from 'react-native-picker-select';
+import { Colors } from 'react-native-paper';
+import Button from '../button';
+
 const Metas = () => {
-  const [isYearly, setIsYearly] = useState(true);
   const [newGoalTitle, setNewGoalTitle] = useState('');
   const [newGoalAmount, setNewGoalAmount] = useState('');
   const [newGoalDate, setNewGoalDate] = useState('');
+  const [financialGoalsData, setFinancialGoalsData] = useState([]);
+  const [completedGoalsData, setCompletedGoalsData] = useState([]);
+  const [filterType, setFilterType] = useState('all');
+  const [showAddMetaFields, setShowAddMetaFields] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const todoRef = firebase.firestore().collection('metas');
 
-  const [yearlyFinancialGoals, setYearlyFinancialGoals] = useState([
-    { id: '1', title: 'Save $5000 for vacation', amount: 5000, targetDate: '2023-12-31', isCompleted: false },
-    // Add more yearly financial goal data as needed
-  ]);
-
-  const [monthlyFinancialGoals, setMonthlyFinancialGoals] = useState([
-    { id: '1', title: 'Save $500 for emergency fund', amount: 500, targetDate: '2023-12-31', isCompleted: false },
-    // Add more monthly financial goal data as needed
-  ]);
-
-  const financialGoalsData = isYearly ? yearlyFinancialGoals : monthlyFinancialGoals;
-  const setFinancialGoalsData = isYearly ? setYearlyFinancialGoals : setMonthlyFinancialGoals;
-
-  const addFinancialGoal = () => {
-    const newFinancialGoal = {
-      id: String(Date.now()),
-      title: newGoalTitle,
-      amount: parseFloat(newGoalAmount) || 0,
-      targetDate: formatDate(newGoalDate),
-      isCompleted: false,
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const snapshot = await todoRef.get();
+        const goals = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+        setFinancialGoalsData(goals);
+      } catch (error) {
+        console.error('Error fetching financial goals: ', error);
+      }
     };
 
-    setFinancialGoalsData((prevGoals) => [...prevGoals, newFinancialGoal]);
-    setNewGoalTitle('');
-    setNewGoalAmount('');
-    setNewGoalDate('');
+    fetchData();
+  }, []);
+
+  const handleAddValor = () => {
+    setShowAddMetaFields(true);
+    setModalVisible(true);
   };
 
-  const onDeleteFinancialGoal = (goalId) => {
-    setFinancialGoalsData((prevGoals) => prevGoals.filter((goal) => goal.id !== goalId));
+  const handleAddMeta = async () => {
+    const dateGoal = moment(newGoalDate, 'DD/MM/YYYY', true);
+
+    if (
+      newGoalTitle.trim() !== '' &&
+      newGoalAmount.trim() !== '' &&
+      dateGoal.isValid()
+    ) {
+      const db = firebase.firestore();
+      try {
+        // Remove R$, substitui vírgulas e pontos por nada
+        const numericAmount = newGoalAmount.replace(/[^\d]/g, '');
+
+        const newGoal = {
+          title: newGoalTitle,
+          valor: numericAmount,
+          valorAtual: '0',
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          dataMeta: dateGoal.toDate(),
+        };
+
+        const docRef = await db.collection('metas').add(newGoal);
+
+        setFinancialGoalsData((prevGoals) => [...prevGoals, { id: docRef.id, ...newGoal }]);
+        setNewGoalTitle('');
+        setNewGoalAmount('');
+        setNewGoalDate('');
+        Keyboard.dismiss();
+        setShowAddMetaFields(false);
+        setModalVisible(false);
+      } catch (error) {
+        console.error('Error adding financial goal: ', error);
+        alert('Erro ao adicionar meta financeira. Por favor, tente novamente.');
+      }
+    } else {
+      alert('Por favor, preencha todos os campos corretamente.');
+    }
   };
 
-  const formatDate = (date) => {
-    // Formata a data no formato DD-MM-AAAA
-    // Supõe que a data inserida já está no formato DD-MM-AAAA
-    return date;
+  const onDeleteFinancialGoal = (metasId) => {
+    Alert.alert(
+      'Confirmar Exclusão',
+      'Tem certeza de que deseja excluir esta meta?',
+      [
+        {
+          text: 'Cancelar',
+          style: 'cancel',
+        },
+        {
+          text: 'Confirmar',
+          onPress: () => handleDeleteConfirmed(metasId),
+        },
+      ],
+      { cancelable: false }
+    );
   };
 
-  const formatCurrency = (value) => {
-    // Formata o valor como moeda brasileira (R$)
-    return parseFloat(value).toLocaleString('pt-BR', {
-      style: 'currency',
-      currency: 'BRL',
-    });
+  const handleDeleteConfirmed = async (metasId) => {
+    try {
+      await todoRef.doc(metasId).delete();
+      setFinancialGoalsData((prevGoals) => prevGoals.filter((goal) => goal.id !== metasId));
+    } catch (error) {
+      console.error('Error deleting financial goal: ', error);
+    }
   };
 
+  const handleUpdateValorAtual = async (metasId, updatedValorAtual) => {
+    try {
+      const updatedGoals = financialGoalsData.map((goal) =>
+        goal.id === metasId
+          ? {
+              ...goal,
+              valorAtual: updatedValorAtual,
+              completed: goal.valor <= updatedValorAtual,
+            }
+          : goal
+      );
+
+      setFinancialGoalsData(updatedGoals);
+
+      if (updatedValorAtual >= financialGoalsData.find((goal) => goal.id === metasId).valor) {
+        setCompletedGoalsData((prevCompletedGoals) => [
+          ...prevCompletedGoals,
+          financialGoalsData.find((goal) => goal.id === metasId),
+        ]);
+      } else {
+        setCompletedGoalsData((prevCompletedGoals) =>
+          prevCompletedGoals.filter((goal) => goal.id !== metasId)
+        );
+      }
+
+      await todoRef.doc(metasId).update({
+        valorAtual: updatedValorAtual,
+        completed: updatedValorAtual >= financialGoalsData.find((goal) => goal.id === metasId).valor,
+      });
+    } catch (error) {
+      console.error('Error updating valorAtual: ', error);
+      alert('Erro ao atualizar o valor atual. Por favor, tente novamente.');
+    }
+  };
+
+  const handleViewCompletedGoals = () => {
+    if (filterType === 'completed') {
+      setCompletedGoalsData(financialGoalsData.filter((goal) => goal.completed));
+    } else if (filterType === 'toBeCompleted') {
+      setCompletedGoalsData(financialGoalsData.filter((goal) => !goal.completed));
+    } else {
+      setCompletedGoalsData([]);
+    }
+  };
+
+  useEffect(() => {
+    handleViewCompletedGoals();
+  }, [filterType, financialGoalsData]);
+
+  const setFormattedDate = (text) => {
+    setNewGoalDate(text);
+  };
+
+  const setFormattedAmount = (text) => {
+    const numericValue = text.replace(/[^0-9]/g, '');
+
+    if (numericValue.length > 2) {
+      const formattedAmount = `R$ ${numericValue.slice(0, -2)}.${numericValue.slice(-2)}`;
+      setNewGoalAmount(formattedAmount);
+    } else {
+      const formattedAmount = `R$ ${numericValue}`;
+      setNewGoalAmount(formattedAmount);
+    }
+  };
 
   return (
-    <View>
-      <View style={styles.switchContainer}>
-        <Text style={styles.switchLabel}>Yearly</Text>
-        <Switch value={isYearly} onValueChange={() => setIsYearly((prev) => !prev)} />
-        <Text style={styles.switchLabel}>Monthly</Text>
-      </View>
+    <View style={styles.container}>
+      <View style={styles.fundo}>
+        <View style={styles.formContainer}>
+          <Button onPress={handleAddValor} buttonText="Adicionar Meta" />
 
-     <View style={styles.formContainer}>
-      <TextInput
-        style={styles.input}
-        placeholder="Descrição da meta"
-        value={newGoalTitle}
-        onChangeText={(text) => setNewGoalTitle(text)}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Valor da Meta (R$)"
-        keyboardType="numeric"
-        value={formatCurrency(newGoalAmount)}
-        onChangeText={(text) => setNewGoalAmount(text)}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Data a ser batida (DD-MM-AAAA)"
-        keyboardType="numeric"
-        value={newGoalDate}
-        onChangeText={(text) => setNewGoalDate(text)}
-      />
-      <TouchableOpacity style={styles.addButton} onPress={addFinancialGoal}>
-        <Text style={styles.buttonText}>Add Financial Goal</Text>
-      </TouchableOpacity>
-    </View>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+              setModalVisible(false);
+            }}>
+            <View style={styles.modalContainer}>
+              <View style={styles.modalContent}>
+                {showAddMetaFields && (
+                  <>
+                    <Text style={styles.sectionTitle}>Descrição da meta</Text>
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Descrição da meta"
+                      value={newGoalTitle}
+                      onChangeText={(text) => setNewGoalTitle(text)}
+                    />
+                    <Text style={styles.sectionTitle}>Valor da Meta (R$)</Text>
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Valor da Meta (R$)"
+                      keyboardType="numeric"
+                      value={newGoalAmount}
+                      onChangeText={(text) => setFormattedAmount(text)}
+                    />
+                    <Text style={styles.sectionTitle}>Data (DD/MM/YYYY)</Text>
+                    <TextInputMask
+                      style={styles.input}
+                      placeholder="Data (DD/MM/YYYY)"
+                      type={'datetime'}
+                      options={{
+                        format: 'DD/MM/YYYY',
+                      }}
+                      value={newGoalDate}
+                      onChangeText={setFormattedDate}
+                    />
+                    <Button onPress={handleAddMeta} buttonText="Adicionar Meta" />
+                  </>
+                )}
+              </View>
+            </View>
+          </Modal>
 
-      <FlatList
-        data={financialGoalsData}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <MetasItem
-            title={item.title}
-            description={`Save $${item.amount} by ${item.targetDate}`}
-            isCompleted={item.isCompleted}
-            onDelete={() => onDeleteFinancialGoal(item.id)}
+          <RNPickerSelect
+            onValueChange={(value) => setFilterType(value)}
+            items={[
+              { label: 'Todas as Metas', value: 'all' },
+              { label: 'Metas Batidas', value: 'completed' },
+              { label: 'Metas a serem Batidas', value: 'toBeCompleted' },
+            ]}
+            style={pickerSelectStyles}
+            value={filterType}
           />
-        )}
-      />
+        </View>
+
+        <View style={styles.listaMetas}>
+          <FlatList
+            data={financialGoalsData.filter((goal) => {
+              if (filterType === 'completed') {
+                return goal.completed;
+              } else if (filterType === 'toBeCompleted') {
+                return !goal.completed;
+              }
+              return true;
+            })}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+              <MetasItem
+                id={item.id}
+                title={item.title}
+                valor={item.valor}
+                valorAtual={item.valorAtual}
+                onUpdateValorAtual={handleUpdateValorAtual}
+                onDelete={() => onDeleteFinancialGoal(item.id)}
+              />
+            )}
+          />
+        </View>
+      </View>
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  switchContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 16,
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    width: '100%',
+    height: 50,
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 5,
+    marginBottom: 20,
+    borderWidth: 1,
+    padding: 5,
+    color: 'black',
+    backgroundColor: 'transparent',
   },
-  switchLabel: {
-    fontSize: 16,
-    marginHorizontal: 10,
+  inputAndroid: {
+    width: '100%',
+    height: 50,
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 5,
+    marginBottom: 20,
+    borderWidth: 1,
+    padding: 5,
+    color: 'black',
+    backgroundColor: 'transparent',
+  },
+});
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    backgroundColor: '#210054',
   },
   formContainer: {
     marginBottom: 16,
     paddingHorizontal: 16,
+    width: '100%',
   },
   input: {
+    width: '100%',
     height: 40,
-    borderColor: 'gray',
+    borderColor: 'input',
     borderWidth: 1,
-    marginBottom: 10,
-    paddingHorizontal: 10,
-  },
-  addButton: {
-    backgroundColor: '#6052b7',
-    padding: 10,
     borderRadius: 5,
-    alignItems: 'center',
+    marginBottom: 10,
+    padding: 5,
+    color: 'black',
+    backgroundColor: 'transparent',
   },
-  buttonText: {
-    color: 'white',
+  fundo: {
+    borderRadius: 10,
+    backgroundColor: '#F0F0F0',
+    height: '95%',
+    width: '90%',
+    alignItems: 'center',
+    marginTop: 20,
+    padding: 30,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 1,
+    shadowRadius: 2,
+  },
+  listaMetas: {
+    flex: 12,
+    width: '100%',
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    width: '100%'
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    padding: 30,
+    borderRadius: 10,
+    elevation: 5,
+    width: '90%'
+  },
+  sectionTitle: {
+    fontSize: 16,
     fontWeight: 'bold',
+    marginTop: 10,
   },
 });
 

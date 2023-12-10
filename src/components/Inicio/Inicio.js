@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import Logo from '../Logo/Logo';
-import { firebase } from '../../firebase/config';
+
+import Button from '../button';
+
 
 export default function Inicio({ navigation }) {
   const username = 'ana123';
@@ -9,23 +11,16 @@ export default function Inicio({ navigation }) {
 
   const handleLogin = async () => {
     try {
-        navigation.navigate('Tabs');
-
-      // if (username && password) {
-      //   // await firebase.auth().signInWithEmailAndPassword(username, password);
-      
-      // } else {
-      //   alert('Por favor, preencha o nome de usuário e senha.');
-      // }
-
+      navigation.navigate('Tabs');
     } catch (error) {
       alert('Erro ao fazer login: ' + error.message);
     }
   };
 
-  const handleCadastro = () => {
-    navigation.navigate('Cadastro');
-  };
+const handleCadastro = () => {
+  navigation.navigate('Cadastro');
+};
+
 
   return (
     <View style={styles.container}>
@@ -46,20 +41,10 @@ export default function Inicio({ navigation }) {
         onChangeText={(text) => setPassword(text)}
       />
 
-      <TouchableOpacity
-        style={[styles.button, { backgroundColor: '#6052b7' }]}
-        onPress={handleLogin}
-      >
-        <Text style={styles.buttonText}>Login</Text>
-      </TouchableOpacity>
-
-      <Text style={styles.text}>Não tem uma conta?</Text>
-      <TouchableOpacity
-        style={[styles.button, { backgroundColor: '#6052b7' }]}
-        onPress={handleCadastro}
-      >
-        <Text style={styles.buttonText}>Cadastre-se</Text>
-      </TouchableOpacity>
+      <View style={styles.btns}>
+        <Button onPress={handleLogin} buttonText="Login" />
+        <Button onPress={handleCadastro} buttonText="Cadastre-se" />
+      </View>
     </View>
   );
 }
@@ -69,8 +54,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-     backgroundColor: '#210054',
-    color: 'white'
+    backgroundColor: '#210054',
+    color: 'white',
   },
   input: {
     height: 40,
@@ -80,28 +65,18 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     paddingHorizontal: 10,
     borderRadius: 8,
-    color: 'white'
-  },
-  button: {
-    borderRadius: 10,
-    paddingVertical: 10,
-    paddingHorizontal: 100,
-    marginVertical: 10,
-    color: 'white'
-  },
-  buttonText: {
     color: 'white',
-    textAlign: 'center',
+  },
+
+  title: {
     fontSize: 18,
+    fontWeight: 'bold',
+    color: 'white',
+    marginBottom: 20, // Adicionando margem abaixo do título
+  },
+  btns: {
+    
+    width: '80%',
   
   },
-  text: {
-    marginTop: 100,
-    color: 'white'
-  },
-  title:{
-    fontSize: 18,
-     fontWeight: 'bold',
-     color: 'white'
-  }
 });

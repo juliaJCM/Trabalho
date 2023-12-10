@@ -1,103 +1,32 @@
-import React, { useState, useEffect,  } from 'react';
+import React, { useState, useEffect } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Image } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AdicionaDespesa from './AdicionaDespesa/AdicionaDespesa';
-import Metricas from './Metricas/Metricas';
+import Categorias from './Categorias/Categorias';
 import Usuario from './Usuario/Usuario';
+import Metricas from './Metricas/Metricas';
 import Metas from './Metas/Metas';
-import { firebase } from './../firebase/config';
-import moment from 'moment';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faChartPie, faBullseye, faChartSimple  } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+
+// Adicione os ícones que você precisa à biblioteca
+library.add(faChartPie, faBullseye, faChartSimple );
+
+// ...
+
 
 const Tab = createBottomTabNavigator();
 
-export const handleAddValor = (
-  valor,
-  selectedCategory,
-  todoRef,
-  setValor,
-  setSelectedCategory,
-  setFormattedDates,
-  Keyboard
-) => {
-  console.log('Chamando handleAddValor');
-  console.log('valor:', valor);
-  console.log('selectedCategory:', selectedCategory);
-  if (valor.trim() !== '' && selectedCategory !== '') {
-    const timestamp = firebase.firestore.FieldValue.serverTimestamp();
-
-    const newExpense = {
-      heading: selectedCategory,
-      valor: valor,
-      createdAt: timestamp,
-      category: selectedCategory,
-    };
-
-    todoRef
-      .add(newExpense)
-      .then(() => {
-        setValor('');
-        setSelectedCategory('');
-        const formattedDate = moment().format('DD/MM/YYYY');
-        setFormattedDates((prevDates) => [...prevDates, formattedDate]);
-        Keyboard.dismiss();
-      })
-      .catch((error) => {
-        alert(error);
-      });
-  } else {
-    alert('Por favor, preencha todos os campos, incluindo a categoria.');
-  }
-};
-
-export const deleteTodo = (todoId) => {
-  const todoRef = firebase.firestore().collection('todos').doc(todoId);
-
-  return todoRef
-    .delete()
-    .then(() => {
-      console.log('Todo successfully deleted!');
-    })
-    .catch((error) => {
-      console.error('Error deleting todo: ', error);
-    });
-};
 export default function MyTabs() {
-  const todoRef = firebase.firestore().collection('todos');
-  const [todos, setTodos] = useState([]);
-
-  useEffect(() => {
-    console.log('todoRef:', todoRef);
-
-    const unsubscribe = todoRef.orderBy('createdAt', 'desc').onSnapshot((querySnapshot) => {
-      const newTodos = [];
-      querySnapshot.forEach((doc) => {
-        const { heading, valor, createdAt } = doc.data();
-        newTodos.push({
-          id: doc.id,
-          heading,
-          valor,
-          createdAt,
-        });
-      });
-      console.log('Todos:', newTodos);
-      setTodos(newTodos);
-
-      // Store newTodos in local storage
-    
-    });
-
-    return () => unsubscribe();
-  }, []);
-
 
   return (
-
     <Tab.Navigator>
       <Tab.Screen
         name="Despesas"
         options={{
-          tabBarIcon: ({ color, size }) => ( 
+          tabBarIcon: ({ color, size }) => (
             <Image
               source={require('../assets/casa.png')}
               style={{ width: size, height: size, tintColor: '#6052b7' }}
@@ -105,21 +34,45 @@ export default function MyTabs() {
           ),
         }}
       >
-        {(props) => <AdicionaDespesa {...props}  todoRef={todoRef}/>}
+        {(props) => (
+          <AdicionaDespesa
+        
+          />
+        )}
       </Tab.Screen>
+    <Tab.Screen
+  name="Categorias"
+  options={{
+    tabBarIcon: ({ color, size }) => (
+         <FontAwesomeIcon icon={faChartPie} style={{ color: '#6052b6' }} size={size} />
 
-      <Tab.Screen
-         name="Metricas"
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="analytics" size={size} color="#6052b7" style={{ tintColor: color }} />
-          ),
-        }}
-      >
-         
-        {(props) => <Metricas {...props} todoRef={todoRef}/>}
-      </Tab.Screen>
-      
+    ),
+  }}
+>
+  {(props) => <Categorias {...props} />}
+    </Tab.Screen>
+        <Tab.Screen
+            name="Metas"
+            options={{
+              tabBarIcon: ({ color, size }) => (
+                <FontAwesomeIcon icon="bullseye" size={size} color={'#6052b6'} />
+              ),
+            }}
+          >
+          {(props) => <Metas {...props} />}
+    </Tab.Screen>
+<Tab.Screen 
+  name="Metricas"
+  options={{
+    tabBarIcon: ({ color, size }) => (
+  <FontAwesomeIcon icon={faChartSimple} beat style={{ color: "#6052b7" }} />
+    ),
+  }}
+>
+  {(props) => <Metricas {...props} />}
+</Tab.Screen>
+
+
        <Tab.Screen
         name="Minha conta"
         options={{
@@ -131,16 +84,7 @@ export default function MyTabs() {
         {(props) => <Usuario {...props} />}
       </Tab.Screen>
       
-     <Tab.Screen
-        name="Metas"
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="bar-chart" size={size} color="#6052b7" style={{ tintColor: color }} />
-          ),
-        }}
-      >
-        {(props) => <Metas {...props} />}
-      </Tab.Screen>
+     
     </Tab.Navigator>
   );
 }

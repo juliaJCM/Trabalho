@@ -15,9 +15,13 @@ import Despesa from '../Despesa/Despesa';
 import { firebase } from '../../firebase/config';
 import RNPickerSelect from 'react-native-picker-select';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
-import { handleAddValor } from '../Funcoes';
+import Ionicons from 'react-native-vector-icons/Ionicons'; // Importe o Ionicons
+import { handleAddValor } from '../Funcoes/Funcoes';
+import Button from '../button';
+
 moment.locale('pt-br');
-const todoRef = firebase.firestore().collection('todos');
+
+const todoRef = firebase.firestore().collection('despesas');
 
 export const deleteTodo = (todos) => {
   todoRef.doc(todos.id).delete();
@@ -35,7 +39,7 @@ const formatCurrency = (value) => {
   return formattedValue;
 };
 
-const GerenciarDespesas = ({ todoRef }) => {
+const GerenciarDespesas = () => {
   const [todos, setTodos] = useState([]);
   const [valor, setValor] = useState('');
   const [selectedMonth, setSelectedMonth] = useState('');
@@ -50,12 +54,13 @@ const GerenciarDespesas = ({ todoRef }) => {
     const unsubscribe = todoRef.orderBy('createdAt', 'desc').onSnapshot((querySnapshot) => {
       const todos = [];
       querySnapshot.forEach((doc) => {
-        const { heading, valor, createdAt } = doc.data();
+        const { heading, valor, createdAt, icon } = doc.data();
         todos.push({
           id: doc.id,
           heading,
           valor,
           createdAt,
+          icon,
         });
       });
       setTodos(todos);
@@ -120,9 +125,28 @@ const GerenciarDespesas = ({ todoRef }) => {
     }
   };
 
-  const adicionarValor = () => {
-    handleAddValor(valor, selectedCategory, todoRef, setValor, setSelectedCategory, setFormattedDates, Keyboard);
+const adicionarValor = () => {
+  // Mapeamento entre categorias e ícones
+  const categoryIcons = {
+    'Moradia': 'home',
+    'Transporte': 'car',
+    'Mercado': 'cart',
+    'Lazer': 'football',
+    'Compras Online': 'bag-check',
+    'Seguro': 'shield-checkmark',
+    'Alimentação': 'fast-food',
+    'Farmácia': 'medkit',
+    'Streaming': 'radio',
+    'Outros': 'ellipsis-horizontal', // Adicione ícone padrão para 'Outros'
   };
+
+  // Obtém o ícone correspondente à categoria selecionada
+  const selectedIcon = categoryIcons[selectedCategory] || 'ellipsis-horizontal';
+
+  // Chama a função handleAddValor com o ícone incluído
+  handleAddValor(valor, selectedCategory, selectedIcon, todoRef, setValor, setSelectedCategory, setFormattedDates, Keyboard);
+};
+
 
   const handleInputChange = (text) => {
     const formattedValue = formatCurrency(text);
@@ -171,20 +195,22 @@ const GerenciarDespesas = ({ todoRef }) => {
                 style={pickerSelectStyles}
               />
 
-              <TouchableOpacity style={styles.addDespesa} onPress={adicionarValor}>
-                <Text style={styles.buttonText}>Adicione</Text>
-              </TouchableOpacity>
+              <Button
+                onPress={adicionarValor}
+                buttonText="Adicione"
+              />
 
               <TouchableOpacity style={styles.closeButton} onPress={closeExpenseForm}>
-                <FontAwesomeIcon name="times-circle" size={30} color="white" />
+                <Ionicons name="times-circle" size={30} color="white" />
               </TouchableOpacity>
             </View>
           </View>
         )}
 
-        <TouchableOpacity style={styles.addDespesa} onPress={toggleAddingExpense}>
-          <Text style={styles.buttonText}>Adicione</Text>
-        </TouchableOpacity>
+        <Button
+          onPress={toggleAddingExpense}
+          buttonText="Adicione"
+        />
 
         <View style={styles.pickerContainer}>
           <RNPickerSelect
@@ -249,7 +275,6 @@ const GerenciarDespesas = ({ todoRef }) => {
     </View>
   );
 };
-
 export default GerenciarDespesas;
 
 
@@ -326,13 +351,6 @@ const styles = StyleSheet.create({
  
   },
 
-  buttonText: {
-    flex: 12,
-    color: 'white',
-    textAlign: 'center',
-    fontSize: 18,
-    width: '100%',
-  },
   containerAdc: {
      borderRadius: 10,
     backgroundColor: '#F0F0F0',
@@ -389,14 +407,7 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
 
-  addDespesa: {
-    borderRadius: 10,
-    flexDirection: 'row',
-    padding: 10,
-    marginVertical: 10,
-    backgroundColor: '#6052b7',
-    color: 'white',
-  },
+
   closeButton: {
     borderRadius: 50,
     backgroundColor: '#6052b7',
@@ -418,5 +429,19 @@ const styles = StyleSheet.create({
     flexDirection:'row',
     alignContent:'center',
     alignItems: 'center,'
-  }
+  }, 
+   buttonContainer: {
+    borderRadius: 10,
+    flexDirection: 'row',
+    padding: 10,
+    marginVertical: 10,
+    backgroundColor: '#6052b7',
+  },
+  buttonText: {
+    flex: 12,
+    color: 'white',
+    textAlign: 'center',
+    fontSize: 18,
+  },
+   
 });
