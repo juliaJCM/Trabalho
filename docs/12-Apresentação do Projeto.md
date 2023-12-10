@@ -10,7 +10,7 @@ Se Controli
 
 ## Identidade Visual (Marca, Design)
 
-![Logo](src/assets/logo.png)
+![Logo](img/logo.png)
 
 ## Conjunto de Slides (Estrutura)
 
