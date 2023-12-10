@@ -10,10 +10,10 @@ Se Controli
 
 ## Identidade Visual (Marca, Design)
 
-O grupo deve ter o cuidado em utilizar figuras, imagens, e cores dentro do contexto da solução proposta, de forma a manter a temática do problema.
+
 
 ## Conjunto de Slides (Estrutura)
 
-O grupo deve distribuir de forma coerente o conteúdo a ser apresentado, dentro do tempo determinado. Importante ressaltar a importância da descrição clara de todo o andamento do projeto, insumos gerados e requisitos atendidos.
+Slides da apresentação do trabalho.
 
 [Se Controli.pdf](https://github.com/juliaJCM/Trabalho/files/13629473/Se.Controli.pdf)
